@@ -1,0 +1,2 @@
+Rimango.CropImageField
+======================

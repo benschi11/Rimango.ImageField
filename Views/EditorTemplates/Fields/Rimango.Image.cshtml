@@ -1,0 +1,46 @@
+﻿﻿@model Rimango.ImageField.ViewModels.ImageFieldViewModel
+@using Orchard.Utility.Extensions;
+
+@{
+   Script.Require("jQuery").AtFoot();
+   //Style.Include("contrib-imagefield-admin.css");
+   string name = Model.Field.Name;
+}
+
+<fieldset>
+    <label for="@Html.FieldIdFor(m => "ImageField-" + name)">@name.CamelFriendly()</label>
+    @if(!String.IsNullOrEmpty(Model.Field.FileName)) {
+        <img class="remove-@Html.FieldIdFor(m => m)" src="@Url.Content(Model.Field.FileName)" width="@Model.Field.Width" height="@Model.Field.Height" /> <br />
+       if (!Model.Settings.Required) {
+        <span id="remove-@Html.FieldIdFor(m => m)" class="button">@T("Remove")</span> <br />
+       }
+   }
+    @Html.HiddenFor(m => m.Removed)
+</fieldset>
+<fieldset>
+    <input id="ImageField-@name" name="ImageField-@name" type="file" value="@T("Browse")" size="64" />
+    <span class="hint">@Model.Settings.Hint</span>
+</fieldset>
+
+@if(Model.Settings.AlternateText) {
+    <fieldset>
+        <label for="@Html.FieldIdFor(m => m.AlternateText)">@T("Alternate text")</label>
+        @Html.EditorFor(m => m.AlternateText)
+        <span class="hint">@T("Is used as a replacement text when images can't be displayed.")</span>
+    </fieldset>
+}
+
+@using (Script.Foot()) {
+    <script type="text/javascript">
+    //<![CDATA[
+        $('form')
+            .attr('enctype', 'multipart/form-data')
+            .attr('encoding', 'multipart/form-data'); // ie issue
+
+        $('#remove-@Html.FieldIdFor(m => m)').click(function() {
+            $('.remove-@Html.FieldIdFor(m => m)').remove();
+            $('#@Html.FieldIdFor(m => m.Removed)').val('true');
+        });
+    //]]>
+    </script>
+}

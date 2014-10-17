@@ -1,0 +1,14 @@
+﻿@using Orchard.Utility.Extensions
+
+@{
+    Style.Include("Rimango.ImageField.css");
+    string name = Model.ContentField.Name;
+}
+
+@if (!String.IsNullOrWhiteSpace(Model.ContentField.FileName))
+{
+    <p class="image-field">
+        <span class="name">@name.CamelFriendly() :</span>
+        <img src="@Url.Content(Model.ContentField.FileName)" alt="@Model.ContentField.AlternateText" width="@Model.ContentField.Width" height="@Model.ContentField.Height" />
+    </p>
+}

@@ -1,4 +1,4 @@
-﻿Name: Rimango.CropImageField
+﻿Name: Rimango.ImageField
 AntiForgery: enabled
 Author: The Orchard Team
 Website: http://orchardproject.net
@@ -6,5 +6,5 @@ Version: 1.0
 OrchardVersion: 1.0
 Description: Description for the module
 Features:
-    Rimango.CropImageField:
-        Description: Description for feature Rimango.CropImageField.
+    Rimango.ImageField:
+        Description: Description for feature Rimango.ImageField.

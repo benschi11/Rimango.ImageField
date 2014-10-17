@@ -1,0 +1,43 @@
+﻿﻿@model Rimango.ImageField.Settings.ImageFieldSettings
+@using Rimango.ImageField.Settings;
+
+<fieldset>
+    <label for="@Html.FieldIdFor(m => m.MaxWidth)">@T("Limit size")</label>
+    @T("Width") @Html.EditorFor(m => m.MaxWidth, new { @class = "text" }) x @T("Height") @Html.EditorFor(m => m.MaxHeight)
+
+    <span class="hint">@T("Enter 0 to allow any value.")</span>
+    @Html.ValidationMessageFor(m => m.MaxWidth)
+    @Html.ValidationMessageFor(m => m.MaxHeight)
+</fieldset>
+<fieldset>
+    <select name="@Html.FieldNameFor(m => m.ResizeAction)" size="1">
+        @foreach (var item in Enum.GetValues(typeof(ResizeActions)))
+        {
+            var name = Enum.GetName(typeof(ResizeActions), item);
+            <option value="@item" @if (Convert.ToInt32(Model.ResizeAction) == Convert.ToInt32(item)) { <text> selected="selected" </text>  }>@T(name)</option>
+        }
+    </select>
+    <span class="hint">@T("Validate: Ensures the original image is in the boundaries.")</span>
+    <span class="hint">@T("Resize: Apply binary transformation so that the new image is within boundaries.")</span>
+    <span class="hint">@T("Scale: Don't alter the image, the html code will define the size to render.")</span>
+    <span class="hint">@T("Crop: The image is cropped to the configured size.")</span>
+</fieldset>
+<fieldset>
+    @Html.CheckBoxFor(m => m.Required) <label class="forcheckbox" for="@Html.FieldIdFor(m => m.Required)">@T("Required")</label>
+    <span class="hint">@T("If checked, the image will be mandatory.")</span>
+</fieldset>
+<fieldset>
+    @Html.CheckBoxFor(m => m.AlternateText) <label class="forcheckbox" for="@Html.FieldIdFor(m => m.AlternateText)">@T("Author can provide alternate text")</label>
+    <span class="hint">@T("If checked, the author can set the alternate text. If no text is defined, the file name will be used.")</span>
+</fieldset>
+<fieldset>
+    <label for="@Html.FieldIdFor(m => m.MediaFolder)">@T("Media folder")</label>
+    @Html.TextBoxFor(m => m.MediaFolder, new { @class = "textMedium" })
+    <span class="hint">@T("The name of the media folder where the image will be saved. You can also use these tokens: {content-type}, {field-name}, {content-item-id}.")</span>
+</fieldset>
+<fieldset>
+    <label for="@Html.FieldIdFor(m => m.Hint)">@T("Help text")</label>
+    @Html.TextAreaFor(m => m.Hint, new { @class = "textMedium", rows = "5" })
+    <span class="hint">@T("The help text is written under the field when authors are editing the content item.")</span>
+    @Html.ValidationMessageFor(m => m.Hint)
+</fieldset>

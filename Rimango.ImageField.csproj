@@ -92,7 +92,6 @@
   <ItemGroup>
     <Compile Include="Driver\ImageFieldDriver.cs" />
     <Compile Include="Fields\ImageField.cs" />
-    <Compile Include="Globals.cs" />
     <Compile Include="Settings\ImageFieldEditorEvents.cs" />
     <Compile Include="Settings\ImageFieldSettings.cs" />
     <Compile Include="ViewModels\ImageFieldViewModel.cs" />
@@ -111,7 +110,9 @@
     <Content Include="Views\Fields\Rimango.Image.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Placment.info" />
+    <Content Include="Placement.info">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

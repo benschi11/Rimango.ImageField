@@ -9,4 +9,5 @@ Version 0.1
 * Retarget to asp.net 4.5
 * Working with Orchard 1.8.1 and up
 
-***
+Source: [Click](https://github.com/benschi11/Rimango.ImageField/tree/v0.1)
+###

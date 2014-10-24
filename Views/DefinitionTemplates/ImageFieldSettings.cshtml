@@ -1,6 +1,11 @@
 ﻿﻿@model Rimango.ImageField.Settings.ImageFieldSettings
 @using Rimango.ImageField.Settings;
 
+@{
+    Style.Require("Rimango.ImageField.Admin");
+    Script.Require("jQuery").AtHead();
+}
+
 <fieldset>
     <label for="@Html.FieldIdFor(m => m.MaxWidth)">@T("Limit size")</label>
     @T("Width") @Html.EditorFor(m => m.MaxWidth, new { @class = "text" }) x @T("Height") @Html.EditorFor(m => m.MaxHeight)
@@ -10,7 +15,7 @@
     @Html.ValidationMessageFor(m => m.MaxHeight)
 </fieldset>
 <fieldset>
-    <select name="@Html.FieldNameFor(m => m.ResizeAction)" size="1">
+    <select name="@Html.FieldNameFor(m => m.ResizeAction)" id="@Html.FieldIdFor(m => m.ResizeAction)" size="1">
         @foreach (var item in Enum.GetValues(typeof(ResizeActions)))
         {
             var name = Enum.GetName(typeof(ResizeActions), item);
@@ -21,6 +26,7 @@
     <span class="hint">@T("Resize: Apply binary transformation so that the new image is within boundaries.")</span>
     <span class="hint">@T("Scale: Don't alter the image, the html code will define the size to render.")</span>
     <span class="hint">@T("Crop: The image is cropped to the configured size.")</span>
+    <span class="hint">@T("UserCrop: The user can select the area for cropping.")</span>
 </fieldset>
 <fieldset>
     @Html.CheckBoxFor(m => m.Required) <label class="forcheckbox" for="@Html.FieldIdFor(m => m.Required)">@T("Required")</label>
@@ -35,9 +41,32 @@
     @Html.TextBoxFor(m => m.MediaFolder, new { @class = "textMedium" })
     <span class="hint">@T("The name of the media folder where the image will be saved. You can also use these tokens: {content-type}, {field-name}, {content-item-id}.")</span>
 </fieldset>
+<fieldset id="user-crop-ratio" @if (Model.ResizeAction != ResizeActions.UserCrop) {
+                                   <text>class="hidden"</text>
+                               }>
+    @Html.CheckBoxFor(m => m.KeepRatioOnly) <label class="forcheckbox" for="@Html.FieldIdFor(m => m.KeepRatioOnly)">@T("Only Keep ratio")</label>
+    <span class="hint">@T("If checked, the size of the image is irrelavent - only ratio is keeping.")</span>
+</fieldset>
 <fieldset>
     <label for="@Html.FieldIdFor(m => m.Hint)">@T("Help text")</label>
     @Html.TextAreaFor(m => m.Hint, new { @class = "textMedium", rows = "5" })
     <span class="hint">@T("The help text is written under the field when authors are editing the content item.")</span>
     @Html.ValidationMessageFor(m => m.Hint)
 </fieldset>
+
+<script type="text/javascript">
+    //<![CDATA[
+    (function ($) {
+        $("#@Html.FieldIdFor(m => m.ResizeAction)").change(function () {
+            if ($(this).val() == '@ResizeActions.UserCrop')
+                $("#user-crop-ratio").fadeIn();
+            else
+                {
+                    $("#user-crop-ratio").fadeOut();
+                    $("#@Html.FieldIdFor(m => m.KeepRatioOnly)").attr("checked", false);
+                }
+        });
+    })(jQuery);
+    //]]>
+
+</script>

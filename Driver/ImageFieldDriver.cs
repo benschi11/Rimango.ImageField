@@ -12,9 +12,11 @@ using Orchard.ContentManagement.Drivers;
 using Orchard.ContentManagement.Handlers;
 using Orchard.Localization;
 ﻿using Orchard.Media.Services;
+﻿using Orchard.MediaLibrary.Services;
 ﻿using Orchard.UI.Notify;
 using System.Drawing;
 using Orchard.Utility.Extensions;
+﻿using Rimango.ImageField.Extensions;
 ﻿using Rimango.ImageField.Settings;
 ﻿using Rimango.ImageField.ViewModels;
 
@@ -81,7 +83,8 @@ namespace Rimango.ImageField.Driver
             var viewModel = new ImageFieldViewModel {
                 Settings = settings,
                 Field = field,
-                Removed = false
+                Removed = false,
+                //Coordinates = new Coordinates()
             };
 
             if (updater.TryUpdateModel(viewModel, GetPrefix(field, part), null, null)) {
@@ -100,13 +103,15 @@ namespace Rimango.ImageField.Driver
                     var postedFileName = Path.GetFileName(postedFile.FileName);
                     postedFileStream.Read(postedFileData, 0, postedFileLength);
 
-                    if (_mediaService.FileAllowed(postedFile)) {
+                    if (_mediaService.FileAllowed(postedFile))
+                    {
                         string uploadedFileName = String.Empty;
 
                         Image image;
                         using (var stream = new MemoryStream(postedFileData)) {
                             image = Image.FromStream(stream);
                         }
+                        
 
                         // apply transformation
                         int newWidth = settings.MaxWidth > 0 && image.Width > settings.MaxWidth
@@ -128,24 +133,7 @@ namespace Rimango.ImageField.Driver
                         }
 
                         // create a unique file name
-                        string uniqueFileName = postedFileName;
-
-                        try {
-                            // try to create the folder before uploading a file into it
-                            _mediaService.CreateFolder(null, mediaFolder);
-                        }
-                        catch {
-                            // the folder can't be created because it already exists, continue
-                        }
-
-                        var existingFiles = _mediaService.GetMediaFiles(mediaFolder);
-                        bool found = true;
-                        var index = 0;
-                        while (found) {
-                            index++;
-                            uniqueFileName = String.Format("{0}-{1}{2}", Path.GetFileNameWithoutExtension(postedFileName), index, Path.GetExtension(postedFileName));
-                            found = existingFiles.Any(f => 0 == String.Compare(uniqueFileName, f.Name, StringComparison.OrdinalIgnoreCase));
-                        }
+                        var uniqueFileName = GetUniqueFileName(postedFileName, mediaFolder);
 
                         // resize the image
                         Image target = null;
@@ -174,14 +162,16 @@ namespace Rimango.ImageField.Driver
                                 target = new Bitmap(image);
                                 break;
                             case ResizeActions.Crop:
-                                target = new Bitmap(newWidth, newHeight);
-                                using (var graphics = Graphics.FromImage(target)) {
-                                    graphics.DrawImage(image, 0, 0, new Rectangle(0, 0, newWidth, newHeight), GraphicsUnit.Pixel);
-                                }
-                                Services.Notifier.Information(T("The image {0} has been cropped to {1}x{2}",
-                                    field.Name.CamelFriendly(), newWidth, newHeight));
+                                target = CropImage(field, newWidth, newHeight, image);
+                                break;
+                            case ResizeActions.UserCrop:
+                                target = CropImage(field, viewModel.CropedWidth, viewModel.CropedHeight, image, new Point(viewModel.Coordinates.x, viewModel.Coordinates.y));
+                                newHeight = viewModel.CropedHeight;
+                                newWidth = viewModel.CropedWidth;
                                 break;
                         }
+
+                        target.Save("C:/temp/target.png", ImageFormat.Png);
 
                         if (target != null) {
                             using (var imageStream = new MemoryStream()) {
@@ -249,6 +239,42 @@ namespace Rimango.ImageField.Driver
             }
 
             return Editor(part, field, shapeHelper);
+        }
+        private Image CropImage(Fields.ImageField field, int newWidth, int newHeight, Image image, Point LeftUperEdge) {
+            var bmpImage = new Bitmap(image);
+            var bmpCrop = bmpImage.Clone(new Rectangle(LeftUperEdge.X, LeftUperEdge.Y, newWidth, newHeight),bmpImage.PixelFormat);
+            
+            Services.Notifier.Information(T("The image {0} has been cropped to {1}x{2}",
+                field.Name.CamelFriendly(), newWidth, newHeight));
+            return (Image)(bmpCrop);
+        }
+
+        private Image CropImage(Fields.ImageField field, int newWidth, int newHeight, Image image) {
+            var target = CropImage(field, newWidth, newHeight, image, new Point(0, 0));
+            return target;
+        }
+
+
+        private string GetUniqueFileName(string postedFileName, string mediaFolder) {
+            string uniqueFileName = postedFileName;
+
+            try {
+                // try to create the folder before uploading a file into it
+                _mediaService.CreateFolder(null, mediaFolder);
+            }
+            catch {
+                // the folder can't be created because it already exists, continue
+            }
+
+            var existingFiles = _mediaService.GetMediaFiles(mediaFolder);
+            bool found = true;
+            var index = 0;
+            while (found) {
+                index++;
+                uniqueFileName = String.Format("{0}-{1}{2}", Path.GetFileNameWithoutExtension(postedFileName), index, Path.GetExtension(postedFileName));
+                found = existingFiles.Any(f => 0 == String.Compare(uniqueFileName, f.Name, StringComparison.OrdinalIgnoreCase));
+            }
+            return uniqueFileName;
         }
 
         private static string FormatWithTokens(string value, string contentType, string fieldName, int contentItemId) {

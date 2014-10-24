@@ -68,6 +68,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\ImageField.Base.js" />
     <Content Include="Styles\Rimango.ImageField.css" />
     <Content Include="Web.config" />
     <Content Include="Scripts\Web.config" />
@@ -84,6 +85,10 @@
       <Project>{9916839C-39FC-4CEB-A5AF-89CA7E87119F}</Project>
       <Name>Orchard.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Orchard.MediaLibrary\Orchard.MediaLibrary.csproj">
+      <Project>{73A7688A-5BD3-4F7E-ADFA-CE36C5A10E3B}</Project>
+      <Name>Orchard.MediaLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Orchard.Media\Orchard.Media.csproj">
       <Project>{D9A7B330-CD22-4DA1-A95A-8DE1982AD8EB}</Project>
       <Name>Orchard.Media</Name>
@@ -91,7 +96,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Driver\ImageFieldDriver.cs" />
+    <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Fields\ImageField.cs" />
+    <Compile Include="ResourceManifest.cs" />
     <Compile Include="Settings\ImageFieldEditorEvents.cs" />
     <Compile Include="Settings\ImageFieldSettings.cs" />
     <Compile Include="ViewModels\ImageFieldViewModel.cs" />
@@ -113,6 +120,9 @@
     <Content Include="Placement.info">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Styles\Rimanog.ImageField.Admin.css" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

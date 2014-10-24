@@ -1,28 +1,54 @@
 ﻿﻿@model Rimango.ImageField.ViewModels.ImageFieldViewModel
 @using Orchard.Utility.Extensions;
+@using Rimango.ImageField.Settings
 
 @{
-   Script.Require("jQuery").AtFoot();
-   //Style.Include("contrib-imagefield-admin.css");
-   string name = Model.Field.Name;
+    Script.Require("jQueryUI").AtFoot();
+    //Style.Include("contrib-imagefield-admin.css");
+
+    Style.Require("jQueryUI_Orchard");
+
+
+    if (Model.Settings.ResizeAction == ResizeActions.UserCrop)
+    {
+        Script.Include("~/Modules/Orchard.ImageEditor/Scripts/jcrop/js/jquery.Jcrop.min.js");
+        Style.Include("~/Modules/Orchard.ImageEditor/Styles/jcrop/css/jquery.Jcrop.css");
+        Script.Require("Rimango.ImageField.Base").AtFoot();
+    }
+
+    string name = Model.Field.Name;
 }
 
 <fieldset>
     <label for="@Html.FieldIdFor(m => "ImageField-" + name)">@name.CamelFriendly()</label>
-    @if(!String.IsNullOrEmpty(Model.Field.FileName)) {
+    @if (!String.IsNullOrEmpty(Model.Field.FileName))
+    {
         <img class="remove-@Html.FieldIdFor(m => m)" src="@Url.Content(Model.Field.FileName)" width="@Model.Field.Width" height="@Model.Field.Height" /> <br />
-       if (!Model.Settings.Required) {
-        <span id="remove-@Html.FieldIdFor(m => m)" class="button">@T("Remove")</span> <br />
-       }
-   }
+        if (!Model.Settings.Required)
+        {
+            <span id="remove-@Html.FieldIdFor(m => m)" class="button">@T("Remove")</span> <br />
+        }
+    }
     @Html.HiddenFor(m => m.Removed)
 </fieldset>
 <fieldset>
     <input id="ImageField-@name" name="ImageField-@name" type="file" value="@T("Browse")" size="64" />
     <span class="hint">@Model.Settings.Hint</span>
 </fieldset>
+@if (Model.Settings.ResizeAction == ResizeActions.UserCrop)
+{
+    @Html.HiddenFor(m => m.Coordinates.x)
+    @Html.HiddenFor(m => m.Coordinates.y)
+    @Html.HiddenFor(m => m.CropedWidth)
+    @Html.HiddenFor(m => m.CropedHeight)
+    <span class="hint">@T("Preview:")</span>
+    <div id="PreLoadImageDiv-@name" style="width: 100px; height: 100px; overflow: hidden; margin-left: 5px;">
 
-@if(Model.Settings.AlternateText) {
+    </div>
+}
+
+@if (Model.Settings.AlternateText)
+{
     <fieldset>
         <label for="@Html.FieldIdFor(m => m.AlternateText)">@T("Alternate text")</label>
         @Html.EditorFor(m => m.AlternateText)
@@ -32,7 +58,7 @@
 
 @using (Script.Foot()) {
     <script type="text/javascript">
-    //<![CDATA[
+        //<![CDATA[
         $('form')
             .attr('enctype', 'multipart/form-data')
             .attr('encoding', 'multipart/form-data'); // ie issue
@@ -41,6 +67,23 @@
             $('.remove-@Html.FieldIdFor(m => m)').remove();
             $('#@Html.FieldIdFor(m => m.Removed)').val('true');
         });
-    //]]>
+
+        //]]>
     </script>
+
+    if (Model.Settings.ResizeAction == ResizeActions.UserCrop) {
+        <script type="text/javascript">
+    jQuery(function($) {
+        var settings = {
+            name: '@name',
+            width: @Model.Settings.MaxWidth,
+            height: @Model.Settings.MaxHeight,
+            keepRatioOnly: @Convert.ToInt32(Model.Settings.KeepRatioOnly),
+            contentTypeName: '@Html.FieldIdFor(m => m)'
+        };
+                $.RimangoImageField.addField('@name', settings);
+        $.RimangoImageField.crop('@name');
+    });
+        </script>
+    }
 }

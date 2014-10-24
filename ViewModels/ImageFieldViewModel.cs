@@ -12,5 +12,16 @@ namespace Rimango.ImageField.ViewModels
         public Fields.ImageField Field { get; set; }
         public string AlternateText { get; set; }
         public bool Removed { get; set; }
+
+        public Coordinates Coordinates { get; set; }
+
+        public int CropedWidth { get; set; }
+        public int CropedHeight { get; set; }
+
+    }
+
+    public class Coordinates {
+        public int x { get; set; }
+        public int y { get; set; }
     }
 }

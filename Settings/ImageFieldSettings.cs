@@ -18,6 +18,8 @@ namespace Rimango.ImageField.Settings
         public string Hint { get; set; }
         public string MediaFolder { get; set; }
         public string FileName { get; set; }
+
+        public bool KeepRatioOnly { get; set; }
     }
 
     public enum ResizeActions

@@ -64,7 +64,7 @@
                                     resizable: false,
                                     buttons: {
                                         "Save": function() {
-
+                                            $(this).dialog('close');
                                         },
                                         "Close": function() {
                                             resetPreviewImage(name);

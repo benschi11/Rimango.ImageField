@@ -7,8 +7,7 @@ Version 0.2 (Pre-Alpha)
 ------------------
 * UserCrop is implemented and seems to work, but needs still more testing and a bunch of code refactoring.
 
-[Source](https://github.com/benschi11/Rimango.ImageField/tree/v0.2)
-[Zip](https://github.com/benschi11/Rimango.ImageField/archive/v0.2.zip)
+[Source](https://github.com/benschi11/Rimango.ImageField/tree/v0.2) | [Zip](https://github.com/benschi11/Rimango.ImageField/archive/v0.2.zip)
 
 Version 0.1
 ------------------

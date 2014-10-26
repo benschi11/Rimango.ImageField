@@ -6,6 +6,13 @@ I will add a new feature to allow the user to define the crop area by it's own.
 
 Demo Site (only with CustomForms for the Moment): http://orchard.neuhold.pro/demos/RimangoImageField
 
+Version 0.4 (Beta)
+------------------
+* Fixed Issue #1 - Bug in Settings slideUp and slideDown
+* Fixed Issue #2 - Invalid CropWidth or CropHeight
+
+[Source](https://github.com/benschi11/Rimango.ImageField/tree/v0.4) | [Zip](https://github.com/benschi11/Rimango.ImageField/archive/v0.4.zip)
+
 Version 0.3.1 (Alpha) Bugfix
 ------------------
 * Removed some Debug code

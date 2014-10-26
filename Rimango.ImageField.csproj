@@ -96,8 +96,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Driver\ImageFieldDriver.cs" />
-    <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Fields\ImageField.cs" />
+    <Compile Include="Helper\TransformationHelper.cs" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Settings\ImageFieldEditorEvents.cs" />
     <Compile Include="Settings\ImageFieldSettings.cs" />
@@ -105,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Extensions\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

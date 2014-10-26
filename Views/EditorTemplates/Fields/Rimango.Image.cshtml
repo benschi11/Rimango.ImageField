@@ -42,10 +42,32 @@
     @Html.HiddenFor(m => m.Coordinates.y)
     @Html.HiddenFor(m => m.CropedWidth)
     @Html.HiddenFor(m => m.CropedHeight)
+    var dim = new Dimensions(100, 100);
+    //if (Model.Settings.UserCropOption != UserCropOptions.FreeTransformation) {
+    //    dim = Model.Settings.GetPreviewImageDimension();
+    //}
     <span class="hint">@T("Preview:")</span>
-    <div id="PreLoadImageDiv-@name" style="width: 100px; height: 100px; overflow: hidden; margin-left: 5px;">
+    <div id="PreLoadImageDiv-@name" style="width: 50px; height:50px; overflow: hidden; margin-left: 5px;">
 
     </div>
+    using (Script.Foot())
+    {
+        <script type="text/javascript">
+            jQuery(function($) {
+                var settings = {
+                    name: '@name',
+                    width: @Model.Settings.MaxWidth,
+                    height: @Model.Settings.MaxHeight,
+                    userCropOption: '@Model.Settings.UserCropOption',
+                    contentTypeName: '@Html.FieldIdFor(m => m)',
+                    previewWidth: @dim.Width,
+                    previewHeight: @dim.Height,
+                    };
+                $.RimangoImageField.addField('@name', settings);
+                $.RimangoImageField.crop('@name');
+            });
+        </script>
+    }
 }
 
 @if (Model.Settings.AlternateText)
@@ -71,20 +93,4 @@
 
         //]]>
     </script>
-
-    if (Model.Settings.ResizeAction == ResizeActions.UserCrop) {
-        <script type="text/javascript">
-    jQuery(function($) {
-        var settings = {
-            name: '@name',
-            width: @Model.Settings.MaxWidth,
-            height: @Model.Settings.MaxHeight,
-            userCropOption: '@Model.Settings.UserCropOption',
-            contentTypeName: '@Html.FieldIdFor(m => m)'
-        };
-        $.RimangoImageField.addField('@name', settings);
-        $.RimangoImageField.crop('@name');
-    });
-        </script>
-    }
 }

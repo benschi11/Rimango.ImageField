@@ -21,6 +21,33 @@
             getHiddenFieldId: function(name, coordname) {
                 return this.getSettings(name).contentTypeName + "_" + coordname;
             },
+            calculatePreviewDimension: function (actualDimensions, maxDimensions) {
+                console.log("old (w/h) (" + actualDimensions.Width + "/" + actualDimensions.Height + ")");
+                var newWidth = maxDimensions.Width > 0 && actualDimensions.Width > maxDimensions.Width
+                ? maxDimensions.Width
+                : actualDimensions.Width;
+                var widthFactor = actualDimensions.Width / newWidth;
+                console.log("Widthfactor:" + widthFactor);
+                var newHeight = maxDimensions.Height > 0 && actualDimensions.Height > maxDimensions.Height
+                    ? maxDimensions.Height
+                    : actualDimensions.Height;
+                var heightFactor = actualDimensions.Height / newHeight;
+                console.log("HeightFactor:" + heightFactor);
+
+                if (widthFactor != heightFactor)
+                {
+                    if (widthFactor > heightFactor)
+                    {
+                        newHeight = Math.round(actualDimensions.Height / widthFactor);
+                    }
+                    else
+                    {
+                        newWidth = Math.round(actualDimensions.Width / heightFactor);
+                    }
+                }
+
+                return { Width: newWidth, Height: newHeight };
+            },
             crop: function(name) {
                 $("#" + this.getFileElementId(name)).change(function(e) {
                     var settings = $.RimangoImageField.getSettings(name);
@@ -43,7 +70,6 @@
 
                         reader.onloadend = function() {
                             img.src = reader.result;
-
 
                             var $dialog = $('<div><div class="jc-dialog"><img src="' + reader.result + '" /></div></div>');
 
@@ -75,14 +101,18 @@
                                 });
                             });
 
-                            function resetPreviewImage(imageFieldName) {
-                                var previewImg = $('#' + $.RimangoImageField.getPreLoadImageId(imageFieldName));
-                                previewImg.removeAttr("style");
-                            }
-
                             function updateCoords(coords) {
-                                var rx = 100 / coords.w;
-                                var ry = 100 / coords.h;
+
+
+                                var previewDivDim = $.RimangoImageField.calculatePreviewDimension({ Width: coords.w, Height: coords.h }, { Width: 200, Height: 200 });
+                                var previewDiv = $("#" + $.RimangoImageField.getPreLoadImageDivId(name));
+                                console.log(previewDivDim.Width + ":" + previewDivDim.Height);
+                                previewDiv.css("width", previewDivDim.Width);
+                                previewDiv.css("height", previewDivDim.Height);
+
+                                var rx = previewDivDim.Width / coords.w;
+                                var ry = previewDivDim.Height / coords.h;
+
 
                                 var previewImg = $('#' + $.RimangoImageField.getPreLoadImageId(name));
 
@@ -108,6 +138,8 @@
                         previewImgDiv.remove("img");
                         previewImgDiv.append(img);
 
+                    } else {
+                        var previewImg = $('#' + $.RimangoImageField.getPreLoadImageId(name)).remove();
                     }
 
 

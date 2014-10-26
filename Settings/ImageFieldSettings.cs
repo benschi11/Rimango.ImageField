@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using Rimango.ImageField.Helper;
 
 namespace Rimango.ImageField.Settings
 {
@@ -20,6 +21,22 @@ namespace Rimango.ImageField.Settings
         public string FileName { get; set; }
 
         public UserCropOptions UserCropOption { get; set; }
+
+        public Dimensions GetPreviewImageDimension() {
+            return TransformationHelper.GetTransformedDimensions(new Dimensions(MaxWidth, MaxHeight), new Dimensions(200, 200));
+        }
+
+
+    }
+
+    public class Dimensions {
+        public int Width { get; set; }
+        public int Height { get; set; }
+
+        public Dimensions(int width, int height) {
+            Width = width;
+            Height = height;
+        }
     }
 
     public enum ResizeActions

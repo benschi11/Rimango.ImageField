@@ -15,8 +15,8 @@ using Orchard.Localization;
 ﻿using Orchard.MediaLibrary.Services;
 ﻿using Orchard.UI.Notify;
 using System.Drawing;
-using Orchard.Utility.Extensions;
-﻿using Rimango.ImageField.Extensions;
+﻿using Orchard.Utility.Extensions;
+﻿using Rimango.ImageField.Helper;
 ﻿using Rimango.ImageField.Settings;
 ﻿using Rimango.ImageField.ViewModels;
 
@@ -111,26 +111,11 @@ namespace Rimango.ImageField.Driver
                         using (var stream = new MemoryStream(postedFileData)) {
                             image = Image.FromStream(stream);
                         }
-                        
 
-                        // apply transformation
-                        int newWidth = settings.MaxWidth > 0 && image.Width > settings.MaxWidth
-                            ? settings.MaxWidth
-                            : image.Width;
-                        float widthFactor = image.Width/(float) newWidth;
-                        int newHeight = settings.MaxHeight > 0 && image.Height > settings.MaxHeight
-                            ? settings.MaxHeight
-                            : image.Height;
-                        float heightFactor = image.Height/(float) newHeight;
+                        var imageDimensions = new Dimensions(image.Width, image.Height);
+                        var maxDimensions = new Dimensions(settings.MaxWidth, settings.MaxHeight);
 
-                        if (widthFactor != heightFactor) {
-                            if (widthFactor > heightFactor) {
-                                newHeight = Convert.ToInt32(image.Height/widthFactor);
-                            }
-                            else {
-                                newWidth = Convert.ToInt32(image.Width/heightFactor);
-                            }
-                        }
+                        var newDimensions = TransformationHelper.GetTransformedDimensions(imageDimensions, maxDimensions);
 
                         // create a unique file name
                         var uniqueFileName = GetUniqueFileName(postedFileName, mediaFolder);
@@ -148,26 +133,25 @@ namespace Rimango.ImageField.Driver
                                 target = new Bitmap(image);
                                 break;
                             case ResizeActions.Resize:
-                                target = new Bitmap(newWidth, newHeight);
+                                target = new Bitmap(newDimensions.Width, newDimensions.Height);
                                 using (var graphics = Graphics.FromImage(target)) {
                                     graphics.CompositingQuality = CompositingQuality.HighSpeed;
                                     graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                                     graphics.CompositingMode = CompositingMode.SourceCopy;
-                                    graphics.DrawImage(image, 0, 0, newWidth, newHeight);
+                                    graphics.DrawImage(image, 0, 0, newDimensions.Width, newDimensions.Height);
                                 }
                                 Services.Notifier.Information(T("The image {0} has been resized to {1}x{2}",
-                                    field.Name.CamelFriendly(), newWidth, newHeight));
+                                    field.Name.CamelFriendly(), newDimensions.Width, newDimensions.Height));
                                 break;
                             case ResizeActions.Scale:
                                 target = new Bitmap(image);
                                 break;
                             case ResizeActions.Crop:
-                                target = CropImage(field, newWidth, newHeight, image);
+                                target = CropImage(field, newDimensions.Width, newDimensions.Height, image);
                                 break;
                             case ResizeActions.UserCrop:
                                 target = CropImage(field, viewModel.CropedWidth, viewModel.CropedHeight, image, new Point(viewModel.Coordinates.x, viewModel.Coordinates.y));
-                                newHeight = viewModel.CropedHeight;
-                                newWidth = viewModel.CropedWidth;
+                                newDimensions =new Dimensions(viewModel.CropedWidth ,viewModel.CropedHeight);
                                 break;
                         }
 
@@ -197,8 +181,8 @@ namespace Rimango.ImageField.Driver
                             }
 
                             // assigning actual size to be rendered in html
-                            field.Width = newWidth;
-                            field.Height = newHeight;
+                            field.Width = newDimensions.Width;
+                            field.Height = newDimensions.Height;
 
                             // don't convert the url to ~/ if it's a fully qualified
                             // as it might be stored on a remote storage (cdn, blob, ...)

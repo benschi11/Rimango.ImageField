@@ -8,6 +8,10 @@ namespace Rimango.ImageField.ViewModels
 {
     public class ImageFieldViewModel
     {
+        public ImageFieldViewModel()
+        {
+            Coordinates = new Coordinates();
+        }
         public ImageFieldSettings Settings { get; set; }
         public Fields.ImageField Field { get; set; }
         public string AlternateText { get; set; }

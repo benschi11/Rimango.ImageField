@@ -6,6 +6,13 @@ I will add a new feature to allow the user to define the crop area by it's own.
 
 Demo is in progress.....
 
+Version 0.3.1 (Alpha) Bugfix
+------------------
+* Removed some Debug code
+* Removed Dependency to Orchard.Media.
+
+[Source](https://github.com/benschi11/Rimango.ImageField/tree/v0.3.1) | [Zip](https://github.com/benschi11/Rimango.ImageField/archive/v0.3.1.zip)
+
 Version 0.3 (Alpha)
 ------------------
 * Code re-factored (but still needs an overview)

@@ -4,7 +4,7 @@ It is based on the ImageField from Sebastien from https://orchardimagefield.code
 I will add a new feature to allow the user to define the crop area by it's own.
 
 
-Demo is in progress.....
+Demo Site (only with CustomForms for the Moment): http://orchard.neuhold.pro/demos/RimangoImageField
 
 Version 0.3.1 (Alpha) Bugfix
 ------------------

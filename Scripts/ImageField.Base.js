@@ -52,8 +52,9 @@
                                 onChange: updateCoords,
                                 bgColor: 'black',
                                 bgOpacity: .4,
-                                setSelect: [100, 100, 50, 50],
-                                aspectRatio: (settings.keepRatioOnly == 1 ? settings.width / settings.height : 0)
+                                setSelect: [0, 0, settings.width, settings.height],
+                                allowResize: (settings.userCropOption == "Fixed" ? 0 : 1),
+                                aspectRatio: (settings.userCropOption == "OnlyKeepRatio" ? settings.width / settings.height : 0)
                             }, function() {
                                 jcrop_api = this;
                                 $dialog.dialog({
@@ -66,10 +67,10 @@
                                         "Save": function() {
                                             $(this).dialog('close');
                                         },
-                                        "Close": function() {
-                                            resetPreviewImage(name);
-                                            $(this).dialog('close');
-                                        }
+                                        //"Close": function() {
+                                        //    resetPreviewImage(name);
+                                        //    $(this).dialog('close');
+                                        //}
                                     }
                                 });
                             });

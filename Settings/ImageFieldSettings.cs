@@ -19,7 +19,7 @@ namespace Rimango.ImageField.Settings
         public string MediaFolder { get; set; }
         public string FileName { get; set; }
 
-        public bool KeepRatioOnly { get; set; }
+        public UserCropOptions UserCropOption { get; set; }
     }
 
     public enum ResizeActions
@@ -34,5 +34,15 @@ namespace Rimango.ImageField.Settings
         Crop,
         // The User get an Dialog to crop the image themself
         UserCrop
+    }
+
+    public enum UserCropOptions 
+    {
+        // The size of the crop area is fixed
+        Fixed,
+        // The size of the crop area is dynamic, but it keeps the ratio
+        OnlyKeepRatio,
+        // No restriction to the crop area
+        FreeTransformation
     }
 }

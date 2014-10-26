@@ -35,6 +35,7 @@
     <input id="ImageField-@name" name="ImageField-@name" type="file" value="@T("Browse")" size="64" />
     <span class="hint">@Model.Settings.Hint</span>
 </fieldset>
+
 @if (Model.Settings.ResizeAction == ResizeActions.UserCrop)
 {
     @Html.HiddenFor(m => m.Coordinates.x)
@@ -78,10 +79,10 @@
             name: '@name',
             width: @Model.Settings.MaxWidth,
             height: @Model.Settings.MaxHeight,
-            keepRatioOnly: @Convert.ToInt32(Model.Settings.KeepRatioOnly),
+            userCropOption: '@Model.Settings.UserCropOption',
             contentTypeName: '@Html.FieldIdFor(m => m)'
         };
-                $.RimangoImageField.addField('@name', settings);
+        $.RimangoImageField.addField('@name', settings);
         $.RimangoImageField.crop('@name');
     });
         </script>

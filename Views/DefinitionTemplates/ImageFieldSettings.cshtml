@@ -42,10 +42,18 @@
     <span class="hint">@T("The name of the media folder where the image will be saved. You can also use these tokens: {content-type}, {field-name}, {content-item-id}.")</span>
 </fieldset>
 <fieldset id="user-crop-ratio" @if (Model.ResizeAction != ResizeActions.UserCrop) {
-                                   <text>class="hidden"</text>
+                                   <text>style="display:none;"</text>
                                }>
-    @Html.CheckBoxFor(m => m.KeepRatioOnly) <label class="forcheckbox" for="@Html.FieldIdFor(m => m.KeepRatioOnly)">@T("Only Keep ratio")</label>
-    <span class="hint">@T("If checked, the size of the image is irrelavent - only ratio is keeping.")</span>
+    <select name="@Html.FieldNameFor(m => m.UserCropOption)" id="@Html.FieldIdFor(m => m.UserCropOption)" size="1">
+        @foreach (var item in Enum.GetValues(typeof(UserCropOptions)))
+        {
+            var name = Enum.GetName(typeof(UserCropOptions), item);
+            <option value="@item" @if (Convert.ToInt32(Model.UserCropOption) == Convert.ToInt32(item)) { <text> selected="selected" </text>   }>@T(name)</option>
+        }
+    </select>
+    <span class="hint">@T("Fixed: The users crop area is fixed.")</span>
+    <span class="hint">@T("OnlyKeepRatio: The users crop area is dynamic, but it keeps the ratio.")</span>
+    <span class="hint">@T("FreeTransformation: No restrictions to the crop area.")</span>
 </fieldset>
 <fieldset>
     <label for="@Html.FieldIdFor(m => m.Hint)">@T("Help text")</label>
@@ -63,7 +71,6 @@
             else
                 {
                     $("#user-crop-ratio").fadeOut();
-                    $("#@Html.FieldIdFor(m => m.KeepRatioOnly)").attr("checked", false);
                 }
         });
     })(jQuery);

@@ -41,7 +41,7 @@
     @Html.TextBoxFor(m => m.MediaFolder, new { @class = "textMedium" })
     <span class="hint">@T("The name of the media folder where the image will be saved. You can also use these tokens: {content-type}, {field-name}, {content-item-id}.")</span>
 </fieldset>
-<fieldset id="user-crop-ratio" @if (Model.ResizeAction != ResizeActions.UserCrop) {
+<fieldset id="@Html.FieldIdFor(m=>m)-usercrop" @if (Model.ResizeAction != ResizeActions.UserCrop) {
                                    <text>style="display:none;"</text>
                                }>
     <select name="@Html.FieldNameFor(m => m.UserCropOption)" id="@Html.FieldIdFor(m => m.UserCropOption)" size="1">
@@ -67,10 +67,10 @@
     (function ($) {
         $("#@Html.FieldIdFor(m => m.ResizeAction)").change(function () {
             if ($(this).val() == '@ResizeActions.UserCrop')
-                $("#user-crop-ratio").fadeIn();
+                $("#@Html.FieldIdFor(m=>m)-usercrop").fadeIn();
             else
                 {
-                    $("#user-crop-ratio").fadeOut();
+                    $("#@Html.FieldIdFor(m=>m)-usercrop").fadeOut();
                 }
         });
     })(jQuery);

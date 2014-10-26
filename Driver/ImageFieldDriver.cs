@@ -11,7 +11,6 @@ using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
 using Orchard.ContentManagement.Handlers;
 using Orchard.Localization;
-﻿using Orchard.Media.Services;
 ﻿using Orchard.MediaLibrary.Services;
 ﻿using Orchard.UI.Notify;
 using System.Drawing;
@@ -19,6 +18,7 @@ using System.Drawing;
 ﻿using Rimango.ImageField.Helper;
 ﻿using Rimango.ImageField.Settings;
 ﻿using Rimango.ImageField.ViewModels;
+
 
 namespace Rimango.ImageField.Driver
 {
@@ -29,13 +29,15 @@ namespace Rimango.ImageField.Driver
         private const string TokenFieldName = "{field-name}";
         private const string TokenContentItemId = "{content-item-id}";
 
-        private readonly IMediaService _mediaService;
+        //private readonly IMediaService _mediaService;
+        private readonly IMediaLibraryService _mediaLibraryService;
 
         public IOrchardServices Services { get; set; }
 
-        public ImageFieldDriver(IOrchardServices services, IMediaService mediaService) {
-            _mediaService = mediaService;
+        public ImageFieldDriver(IOrchardServices services, IMediaLibraryService mediaLibraryService) {
+            //_mediaService = mediaService;
             Services = services;
+            _mediaLibraryService = mediaLibraryService;
             T = NullLocalizer.Instance;
         }
 
@@ -49,9 +51,9 @@ namespace Rimango.ImageField.Driver
             return field.Name;
         }
 
-        public ImageFieldDriver(IMediaService mediaService) {
-            _mediaService = mediaService;
-        }
+        //public ImageFieldDriver(IMediaService mediaService) {
+        //    _mediaService = mediaService;
+        //}
 
         protected override DriverResult Display(ContentPart part, Fields.ImageField field, string displayType, dynamic shapeHelper) {
             return ContentShape("Fields_Rimango_Image", GetDifferentiator(field, part),
@@ -103,8 +105,8 @@ namespace Rimango.ImageField.Driver
                     var postedFileName = Path.GetFileName(postedFile.FileName);
                     postedFileStream.Read(postedFileData, 0, postedFileLength);
 
-                    if (_mediaService.FileAllowed(postedFile))
-                    {
+                    //if (_mediaService.FileAllowed(postedFile))
+                    //{
                         string uploadedFileName = String.Empty;
 
                         Image image;
@@ -118,7 +120,8 @@ namespace Rimango.ImageField.Driver
                         var newDimensions = TransformationHelper.GetTransformedDimensions(imageDimensions, maxDimensions);
 
                         // create a unique file name
-                        var uniqueFileName = GetUniqueFileName(postedFileName, mediaFolder);
+                        //var uniqueFileName = GetUniqueFileName(postedFileName, mediaFolder);
+                        var uniqueFileName = _mediaLibraryService.GetUniqueFilename(mediaFolder, postedFileName);
 
                         // resize the image
                         Image target = null;
@@ -155,7 +158,6 @@ namespace Rimango.ImageField.Driver
                                 break;
                         }
 
-                        target.Save("C:/temp/target.png", ImageFormat.Png);
 
                         if (target != null) {
                             using (var imageStream = new MemoryStream()) {
@@ -177,7 +179,8 @@ namespace Rimango.ImageField.Driver
                                 }
 
                                 target.Save(imageStream, imageFormat);
-                                uploadedFileName = _mediaService.UploadMediaFile(mediaFolder, uniqueFileName, imageStream.ToArray(), false);
+                                //uploadedFileName = _mediaService.UploadMediaFile(mediaFolder, uniqueFileName, imageStream.ToArray(), false);
+                                uploadedFileName = _mediaLibraryService.UploadMediaFile(mediaFolder, uniqueFileName, imageStream.ToArray());
                             }
 
                             // assigning actual size to be rendered in html
@@ -195,10 +198,10 @@ namespace Rimango.ImageField.Driver
                             field.Height = 0;
                             field.FileName = String.Empty;
                         }
-                    }
-                    else {
-                        updater.AddModelError("File", T("The file type is not allowed for: {0}.", postedFile.FileName));
-                    }
+                    //}
+                    //else {
+                    //    updater.AddModelError("File", T("The file type is not allowed for: {0}.", postedFile.FileName));
+                    //}
                 }
                 else {
                     if (settings.Required && string.IsNullOrWhiteSpace(field.FileName)) {
@@ -239,27 +242,29 @@ namespace Rimango.ImageField.Driver
         }
 
 
-        private string GetUniqueFileName(string postedFileName, string mediaFolder) {
-            string uniqueFileName = postedFileName;
+        //private string GetUniqueFileName(string postedFileName, string mediaFolder) {
+        //    string uniqueFileName = postedFileName;
 
-            try {
-                // try to create the folder before uploading a file into it
-                _mediaService.CreateFolder(null, mediaFolder);
-            }
-            catch {
-                // the folder can't be created because it already exists, continue
-            }
+        //    try {
+        //        // try to create the folder before uploading a file into it
+        //        //_mediaService.CreateFolder(null, mediaFolder);
+        //        _mediaLibraryService.CreateFolder(null, mediaFolder);
+        //    }
+        //    catch {
+        //        // the folder can't be created because it already exists, continue
+        //    }
 
-            var existingFiles = _mediaService.GetMediaFiles(mediaFolder);
-            bool found = true;
-            var index = 0;
-            while (found) {
-                index++;
-                uniqueFileName = String.Format("{0}-{1}{2}", Path.GetFileNameWithoutExtension(postedFileName), index, Path.GetExtension(postedFileName));
-                found = existingFiles.Any(f => 0 == String.Compare(uniqueFileName, f.Name, StringComparison.OrdinalIgnoreCase));
-            }
-            return uniqueFileName;
-        }
+        //    //var existingFiles = _mediaService.GetMediaFiles(mediaFolder);
+        //    var existingFiles = _mediaLibraryService.GetMediaFiles(mediaFolder);
+        //    bool found = true;
+        //    var index = 0;
+        //    while (found) {
+        //        index++;
+        //        uniqueFileName = String.Format("{0}-{1}{2}", Path.GetFileNameWithoutExtension(postedFileName), index, Path.GetExtension(postedFileName));
+        //        found = existingFiles.Any(f => 0 == String.Compare(uniqueFileName, f.Name, StringComparison.OrdinalIgnoreCase));
+        //    }
+        //    return uniqueFileName;
+        //}
 
         private static string FormatWithTokens(string value, string contentType, string fieldName, int contentItemId) {
             if (String.IsNullOrWhiteSpace(value)) {

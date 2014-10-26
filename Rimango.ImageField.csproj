@@ -86,12 +86,8 @@
       <Name>Orchard.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orchard.MediaLibrary\Orchard.MediaLibrary.csproj">
-      <Project>{73A7688A-5BD3-4F7E-ADFA-CE36C5A10E3B}</Project>
+      <Project>{73a7688a-5bd3-4f7e-adfa-ce36c5a10e3b}</Project>
       <Name>Orchard.MediaLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Orchard.Media\Orchard.Media.csproj">
-      <Project>{D9A7B330-CD22-4DA1-A95A-8DE1982AD8EB}</Project>
-      <Name>Orchard.Media</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

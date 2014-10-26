@@ -4,8 +4,9 @@ Author: The Orchard Team
 Website: http://orchardproject.net
 Version: 0.3
 OrchardVersion: 1.8.1
+Description: ImageField with the possibility to validate, resize, crop and UserCrop the uploaded image. 
 Features:
     Rimango.ImageField:
         Description: ImageField with the possibility to validate, resize, crop and UserCrop the uploaded image. 
-        Dependencies: Orchard.jQuery, Orchard.Media
+        Dependencies: Orchard.jQuery, Orchard.MediaLibrary
         Category: Fields

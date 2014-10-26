@@ -2,9 +2,10 @@
 AntiForgery: enabled
 Author: The Orchard Team
 Website: http://orchardproject.net
-Version: 1.0
-OrchardVersion: 1.0
-Description: Description for the module
+Version: 0.3
+OrchardVersion: 1.8.1
 Features:
     Rimango.ImageField:
-        Description: Description for feature Rimango.ImageField.
+        Description: ImageField with the possibility to validate, resize, crop and UserCrop the uploaded image. 
+        Dependencies: Orchard.jQuery, Orchard.Media
+        Category: Fields

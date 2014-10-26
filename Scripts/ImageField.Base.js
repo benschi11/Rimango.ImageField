@@ -126,10 +126,12 @@
                                     marginTop: '-' + Math.round(ry * coords.y) + 'px'
                                 });
 
+                                console.log("(" + coords.w + "/" + coords.h + ")");
+
                                 $("#" + $.RimangoImageField.getHiddenFieldId(name, "Coordinates_x")).val(coords.x);
                                 $("#" + $.RimangoImageField.getHiddenFieldId(name, "Coordinates_y")).val(coords.y);
-                                $("#" + $.RimangoImageField.getHiddenFieldId(name, "CropedWidth")).val(coords.w);
-                                $("#" + $.RimangoImageField.getHiddenFieldId(name, "CropedHeight")).val(coords.h);
+                                $("#" + $.RimangoImageField.getHiddenFieldId(name, "CropedWidth")).val(Math.round(coords.w));
+                                $("#" + $.RimangoImageField.getHiddenFieldId(name, "CropedHeight")).val(Math.round(coords.h));
 
                             };
                         }

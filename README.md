@@ -8,8 +8,8 @@ Demo Site (only with CustomForms for the Moment): http://orchard-demos.neuhold.p
 
 Version 0.4 (Beta)
 ------------------
-* Fixed Issue #1 - Bug in Settings slideUp and slideDown
-* Fixed Issue #2 - Invalid CropWidth or CropHeight
+* Fixed Issue [#1](/../../issues/1) - Bug in Settings slideUp and slideDown
+* Fixed Issue [#2](/../../issues/2) - Invalid CropWidth or CropHeight
 
 [Source](https://github.com/benschi11/Rimango.ImageField/tree/v0.4) | [Zip](https://github.com/benschi11/Rimango.ImageField/archive/v0.4.zip)
 

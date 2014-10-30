@@ -23,7 +23,7 @@
     <label for="@Html.FieldIdFor(m => "ImageField-" + name)">@name.CamelFriendly()</label>
     @if (!String.IsNullOrEmpty(Model.Field.FileName))
     {
-        <img class="remove-@Html.FieldIdFor(m => m)" src="@Url.Content(Model.Field.FileName)" width="@Model.Field.Width" height="@Model.Field.Height" /> <br />
+        <img class="remove-@Html.FieldIdFor(m => m)" src="@Url.Content(Model.Field.FileName)" width="200" /> <br />
         if (!Model.Settings.Required)
         {
             <span id="remove-@Html.FieldIdFor(m => m)" class="button">@T("Remove")</span> <br />

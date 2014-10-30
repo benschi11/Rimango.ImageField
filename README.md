@@ -6,6 +6,14 @@ I will add a new feature to allow the user to define the crop area by it's own.
 
 Demo Site (only with CustomForms for the Moment): http://orchard-demos.neuhold.pro/RimangoImageField
 
+Version 0.4.5 RC
+------------------
+* Fixed Issue [#3](/../../issues/3) - X and Y required on non required Field
+* Fixed Issue [#5](/../../issues/5) - Change size of dispaying the image in admin view
+* Fixed Issue [#6](/../../issues/6) - Fixed size is not really fixed size
+
+Not released yet.
+
 Version 0.4 (Beta)
 ------------------
 * Fixed Issue [#1](/../../issues/1) - Bug in Settings slideUp and slideDown

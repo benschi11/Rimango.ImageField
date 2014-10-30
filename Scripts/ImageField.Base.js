@@ -22,17 +22,17 @@
                 return this.getSettings(name).contentTypeName + "_" + coordname;
             },
             calculatePreviewDimension: function (actualDimensions, maxDimensions) {
-                console.log("old (w/h) (" + actualDimensions.Width + "/" + actualDimensions.Height + ")");
+                //console.log("old (w/h) (" + actualDimensions.Width + "/" + actualDimensions.Height + ")");
                 var newWidth = maxDimensions.Width > 0 && actualDimensions.Width > maxDimensions.Width
                 ? maxDimensions.Width
                 : actualDimensions.Width;
                 var widthFactor = actualDimensions.Width / newWidth;
-                console.log("Widthfactor:" + widthFactor);
+                //console.log("Widthfactor:" + widthFactor);
                 var newHeight = maxDimensions.Height > 0 && actualDimensions.Height > maxDimensions.Height
                     ? maxDimensions.Height
                     : actualDimensions.Height;
                 var heightFactor = actualDimensions.Height / newHeight;
-                console.log("HeightFactor:" + heightFactor);
+                //console.log("HeightFactor:" + heightFactor);
 
                 if (widthFactor != heightFactor)
                 {
@@ -80,7 +80,8 @@
                                 bgOpacity: .4,
                                 setSelect: [0, 0, settings.width, settings.height],
                                 allowResize: (settings.userCropOption == "Fixed" ? 0 : 1),
-                                aspectRatio: (settings.userCropOption == "OnlyKeepRatio" ? settings.width / settings.height : 0)
+                                allowSelect: 0,
+                                aspectRatio: ((settings.userCropOption == "OnlyKeepRatio" || settings.userCropOption == "Fixed") ? settings.width / settings.height : 0)
                             }, function() {
                                 jcrop_api = this;
                                 $dialog.dialog({

@@ -34,7 +34,7 @@
                 var heightFactor = actualDimensions.Height / newHeight;
                 //console.log("HeightFactor:" + heightFactor);
 
-                if (widthFactor != heightFactor)
+                if (widthFactor !== heightFactor)
                 {
                     if (widthFactor > heightFactor)
                     {
@@ -77,11 +77,11 @@
                                 onSelect: updateCoords,
                                 onChange: updateCoords,
                                 bgColor: 'black',
-                                bgOpacity: .4,
+                                bgOpacity: 0.4,
                                 setSelect: [0, 0, settings.width, settings.height],
-                                allowResize: (settings.userCropOption == "Fixed" ? 0 : 1),
+                                allowResize: (settings.userCropOption === "Fixed" ? 0 : 1),
                                 allowSelect: 0,
-                                aspectRatio: ((settings.userCropOption == "OnlyKeepRatio" || settings.userCropOption == "Fixed") ? settings.width / settings.height : 0)
+                                aspectRatio: ((settings.userCropOption === "OnlyKeepRatio" || settings.userCropOption === "Fixed") ? settings.width / settings.height : 0)
                             }, function() {
                                 jcrop_api = this;
                                 $dialog.dialog({
@@ -134,15 +134,15 @@
                                 $("#" + $.RimangoImageField.getHiddenFieldId(name, "CropedWidth")).val(Math.round(coords.w));
                                 $("#" + $.RimangoImageField.getHiddenFieldId(name, "CropedHeight")).val(Math.round(coords.h));
 
-                            };
-                        }
+                            }
+                        };
                         reader.readAsDataURL(file);
 
                         previewImgDiv.remove("img");
                         previewImgDiv.append(img);
 
                     } else {
-                        var previewImg = $('#' + $.RimangoImageField.getPreLoadImageId(name)).remove();
+                        $('#' + $.RimangoImageField.getPreLoadImageId(name)).remove();
                     }
 
 

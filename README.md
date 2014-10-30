@@ -8,16 +8,16 @@ Demo Site (only with CustomForms for the Moment): http://orchard-demos.neuhold.p
 
 Version 0.4.5 RC
 ------------------
-* Fixed Issue [#3](/../../issues/3) - X and Y required on non required Field
-* Fixed Issue [#5](/../../issues/5) - Change size of dispaying the image in admin view
-* Fixed Issue [#6](/../../issues/6) - Fixed size is not really fixed size
+* Fixed [Issue #3](/../../issues/3) - X and Y required on non required Field
+* Fixed [Issue #5](/../../issues/5) - Change size of dispaying the image in admin view
+* Fixed [Issue #6](/../../issues/6) - Fixed size is not really fixed size
 
 Not released yet.
 
 Version 0.4 (Beta)
 ------------------
-* Fixed Issue [#1](/../../issues/1) - Bug in Settings slideUp and slideDown
-* Fixed Issue [#2](/../../issues/2) - Invalid CropWidth or CropHeight
+* Fixed [Issue #1](/../../issues/1) - Bug in Settings slideUp and slideDown
+* Fixed [Issue #2](/../../issues/2) - Invalid CropWidth or CropHeight
 
 [Source](https://github.com/benschi11/Rimango.ImageField/tree/v0.4) | [Zip](https://github.com/benschi11/Rimango.ImageField/archive/v0.4.zip)
 

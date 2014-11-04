@@ -1,8 +1,8 @@
 ﻿Name: Rimango.ImageField
 AntiForgery: enabled
-Author: The Orchard Team
-Website: http://orchardproject.net
-Version: 0.4
+Author: Rimango Development
+Website: http://neuhold.pro
+Version: 0.4.5
 OrchardVersion: 1.8.1
 Description: ImageField with the possibility to validate, resize, crop and UserCrop the uploaded image. 
 Features:

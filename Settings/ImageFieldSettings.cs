@@ -23,7 +23,7 @@ namespace Rimango.ImageField.Settings
         public UserCropOptions UserCropOption { get; set; }
 
         public Dimensions GetPreviewImageDimension() {
-            return TransformationHelper.GetTransformedDimensions(new Dimensions(MaxWidth, MaxHeight), new Dimensions(200, 200));
+            return TransformationHelper.GetTransformDimensionsOnMax(new Dimensions(MaxWidth, MaxHeight), new Dimensions(200, 200));
         }
 
 

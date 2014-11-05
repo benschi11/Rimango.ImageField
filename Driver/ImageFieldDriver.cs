@@ -22,6 +22,8 @@ using System.Drawing;
 
 namespace Rimango.ImageField.Driver
 {
+    using Rimango.ImageField.Services;
+
     [UsedImplicitly]
     public class ImageFieldDriver : ContentFieldDriver<Fields.ImageField> {
         private const string TemplateName = "Fields/Rimango.Image";
@@ -29,15 +31,19 @@ namespace Rimango.ImageField.Driver
         private const string TokenFieldName = "{field-name}";
         private const string TokenContentItemId = "{content-item-id}";
 
-        //private readonly IMediaService _mediaService;
         private readonly IMediaLibraryService _mediaLibraryService;
+
+        private readonly IImageService _imageService;
 
         public IOrchardServices Services { get; set; }
 
-        public ImageFieldDriver(IOrchardServices services, IMediaLibraryService mediaLibraryService) {
-            //_mediaService = mediaService;
+        public ImageFieldDriver(
+            IOrchardServices services, 
+            IMediaLibraryService mediaLibraryService,
+            IImageService imageservice) {
             Services = services;
             _mediaLibraryService = mediaLibraryService;
+            _imageService = imageservice;
             T = NullLocalizer.Instance;
         }
 
@@ -50,10 +56,6 @@ namespace Rimango.ImageField.Driver
         private static string GetDifferentiator(Fields.ImageField field, ContentPart part) {
             return field.Name;
         }
-
-        //public ImageFieldDriver(IMediaService mediaService) {
-        //    _mediaService = mediaService;
-        //}
 
         protected override DriverResult Display(ContentPart part, Fields.ImageField field, string displayType, dynamic shapeHelper) {
             return ContentShape("Fields_Rimango_Image", GetDifferentiator(field, part),
@@ -117,7 +119,7 @@ namespace Rimango.ImageField.Driver
                         var imageDimensions = new Dimensions(image.Width, image.Height);
                         var maxDimensions = new Dimensions(settings.MaxWidth, settings.MaxHeight);
 
-                        var newDimensions = TransformationHelper.GetTransformedDimensions(imageDimensions, maxDimensions);
+                        var newDimensions = TransformationHelper.GetTransformDimensionsOnMax(imageDimensions, maxDimensions);
 
                         // create a unique file name
                         //var uniqueFileName = GetUniqueFileName(postedFileName, mediaFolder);
@@ -127,8 +129,7 @@ namespace Rimango.ImageField.Driver
                         Image target = null;
                         switch (settings.ResizeAction) {
                             case ResizeActions.Validate:
-                                if ((settings.MaxWidth > 0 && image.Width > settings.MaxWidth) ||
-                                    (settings.MaxHeight > 0 && image.Height > settings.MaxHeight)) {
+                                if (!_imageService.ValidateImage(image, maxDimensions, ValidationType.Max)) {
                                     updater.AddModelError("File",
                                         T("The file is bigger than the allowed size: {0}x{1}",
                                             image.Width, image.Height));
@@ -136,13 +137,7 @@ namespace Rimango.ImageField.Driver
                                 target = new Bitmap(image);
                                 break;
                             case ResizeActions.Resize:
-                                target = new Bitmap(newDimensions.Width, newDimensions.Height);
-                                using (var graphics = Graphics.FromImage(target)) {
-                                    graphics.CompositingQuality = CompositingQuality.HighSpeed;
-                                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                    graphics.CompositingMode = CompositingMode.SourceCopy;
-                                    graphics.DrawImage(image, 0, 0, newDimensions.Width, newDimensions.Height);
-                                }
+                                target = _imageService.Resize(image, maxDimensions, ResizeType.KeepRatioOnMax);
                                 Services.Notifier.Information(T("The image {0} has been resized to {1}x{2}",
                                     field.Name.CamelFriendly(), newDimensions.Width, newDimensions.Height));
                                 break;
@@ -150,11 +145,19 @@ namespace Rimango.ImageField.Driver
                                 target = new Bitmap(image);
                                 break;
                             case ResizeActions.Crop:
-                                target = CropImage(field, newDimensions.Width, newDimensions.Height, image);
+                                target = _imageService.Crop(image, new Point(0, 0), maxDimensions);
+                                Services.Notifier.Information(T("The image {0} has been cropped to {1}x{2}",
+                                    field.Name.CamelFriendly(), maxDimensions.Width, maxDimensions.Height));
                                 break;
                             case ResizeActions.UserCrop:
-                                target = CropImage(field, viewModel.CropedWidth, viewModel.CropedHeight, image, new Point(viewModel.Coordinates.x, viewModel.Coordinates.y));
-                                newDimensions =new Dimensions(viewModel.CropedWidth ,viewModel.CropedHeight);
+                                //target = CropImage(field, viewModel.CropedWidth, viewModel.CropedHeight, image, new Point(viewModel.Coordinates.x, viewModel.Coordinates.y));
+                                target = _imageService.Crop(
+                                    image,
+                                    new Point(viewModel.Coordinates.x, viewModel.Coordinates.y),
+                                    viewModel.CropedWidth,
+                                    viewModel.CropedHeight);
+                                Services.Notifier.Information(T("The image {0} has been cropped to {1}x{2}",
+                                    field.Name.CamelFriendly(), viewModel.CropedWidth, viewModel.CropedHeight));
                                 break;
                         }
 
@@ -227,44 +230,6 @@ namespace Rimango.ImageField.Driver
 
             return Editor(part, field, shapeHelper);
         }
-        private Image CropImage(Fields.ImageField field, int newWidth, int newHeight, Image image, Point LeftUperEdge) {
-            var bmpImage = new Bitmap(image);
-            var bmpCrop = bmpImage.Clone(new Rectangle(LeftUperEdge.X, LeftUperEdge.Y, newWidth, newHeight),bmpImage.PixelFormat);
-            
-            Services.Notifier.Information(T("The image {0} has been cropped to {1}x{2}",
-                field.Name.CamelFriendly(), newWidth, newHeight));
-            return (Image)(bmpCrop);
-        }
-
-        private Image CropImage(Fields.ImageField field, int newWidth, int newHeight, Image image) {
-            var target = CropImage(field, newWidth, newHeight, image, new Point(0, 0));
-            return target;
-        }
-
-
-        //private string GetUniqueFileName(string postedFileName, string mediaFolder) {
-        //    string uniqueFileName = postedFileName;
-
-        //    try {
-        //        // try to create the folder before uploading a file into it
-        //        //_mediaService.CreateFolder(null, mediaFolder);
-        //        _mediaLibraryService.CreateFolder(null, mediaFolder);
-        //    }
-        //    catch {
-        //        // the folder can't be created because it already exists, continue
-        //    }
-
-        //    //var existingFiles = _mediaService.GetMediaFiles(mediaFolder);
-        //    var existingFiles = _mediaLibraryService.GetMediaFiles(mediaFolder);
-        //    bool found = true;
-        //    var index = 0;
-        //    while (found) {
-        //        index++;
-        //        uniqueFileName = String.Format("{0}-{1}{2}", Path.GetFileNameWithoutExtension(postedFileName), index, Path.GetExtension(postedFileName));
-        //        found = existingFiles.Any(f => 0 == String.Compare(uniqueFileName, f.Name, StringComparison.OrdinalIgnoreCase));
-        //    }
-        //    return uniqueFileName;
-        //}
 
         private static string FormatWithTokens(string value, string contentType, string fieldName, int contentItemId) {
             if (String.IsNullOrWhiteSpace(value)) {

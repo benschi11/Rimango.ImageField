@@ -95,6 +95,8 @@
     <Compile Include="Fields\ImageField.cs" />
     <Compile Include="Helper\TransformationHelper.cs" />
     <Compile Include="ResourceManifest.cs" />
+    <Compile Include="Services\IImageService.cs" />
+    <Compile Include="Services\ImageService.cs" />
     <Compile Include="Settings\ImageFieldEditorEvents.cs" />
     <Compile Include="Settings\ImageFieldSettings.cs" />
     <Compile Include="ViewModels\ImageFieldViewModel.cs" />

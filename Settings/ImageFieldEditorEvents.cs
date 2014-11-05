@@ -36,6 +36,7 @@ namespace Rimango.ImageField.Settings
                 builder.WithSetting("ImageFieldSettings.AlternateText", model.AlternateText.ToString());
                 builder.WithSetting("ImageFieldSettings.ResizeAction", model.ResizeAction.ToString());
                 builder.WithSetting("ImageFieldSettings.UserCropOption", model.UserCropOption.ToString());
+                builder.WithSetting("ImageFieldSettings.DefaultImage", model.DefaultImage);
             }
 
             yield return DefinitionTemplate(model);

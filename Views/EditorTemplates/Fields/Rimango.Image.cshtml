@@ -15,15 +15,18 @@
         Style.Include("~/Modules/Orchard.ImageEditor/Styles/jcrop/css/jquery.Jcrop.css");
         Script.Require("Rimango.ImageField.Base").AtFoot();
     }
-
+    
     string name = Model.Field.Name;
+    string url = (!String.IsNullOrWhiteSpace(Model.Field.FileName)) ? Url.Content(Model.Field.FileName) : (VirtualPathUtility.IsAbsolute(Model.Settings.DefaultImage) ? VirtualPathUtility.ToAppRelative(Model.Settings.DefaultImage) : Url.Content(Model.Settings.DefaultImage));
+    string width = (Model.Field.Width > 0 && Model.Field.Width < 200) ? Model.Field.Width.ToString() : (Model.Field.Width <= 0 ? "Auto" :"200");
+    
 }
 
 <fieldset>
     <label for="@Html.FieldIdFor(m => "ImageField-" + name)">@name.CamelFriendly()</label>
-    @if (!String.IsNullOrEmpty(Model.Field.FileName))
+    @if (!String.IsNullOrEmpty(Model.Field.FileName) || !String.IsNullOrWhiteSpace(Model.Settings.DefaultImage))
     {
-        <img class="remove-@Html.FieldIdFor(m => m)" src="@Url.Content(Model.Field.FileName)" width="200" /> <br />
+        <img class="remove-@Html.FieldIdFor(m => m)" src="@url" width="@width" /> <br />
         if (!Model.Settings.Required)
         {
             <span id="remove-@Html.FieldIdFor(m => m)" class="button">@T("Remove")</span> <br />

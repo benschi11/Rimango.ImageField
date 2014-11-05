@@ -37,6 +37,10 @@
     <span class="hint">@T("If checked, the author can set the alternate text. If no text is defined, the file name will be used.")</span>
 </fieldset>
 <fieldset>
+    @Html.TextBoxFor(m => m.DefaultImage)
+    <span class="hint">@T("Define an absolute path or an relativ path to an default image, which is displayed if no image is selected.")</span>
+</fieldset>
+<fieldset>
     <label for="@Html.FieldIdFor(m => m.MediaFolder)">@T("Media folder")</label>
     @Html.TextBoxFor(m => m.MediaFolder, new { @class = "textMedium" })
     <span class="hint">@T("The name of the media folder where the image will be saved. You can also use these tokens: {content-type}, {field-name}, {content-item-id}.")</span>

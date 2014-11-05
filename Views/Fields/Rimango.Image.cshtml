@@ -3,12 +3,19 @@
 @{
     Style.Include("Rimango.ImageField.css");
     string name = Model.ContentField.Name;
+    
+
+    string url = (!String.IsNullOrWhiteSpace(Model.ContentField.FileName)) ? Url.Content(Model.ContentField.FileName) : Model.Settings.DefaultImage;
+    string width = (!String.IsNullOrWhiteSpace(Model.ContentField.FileName)) ? Model.ContentField.Width : "Auto";
+    string height = (!String.IsNullOrWhiteSpace(Model.ContentField.FileName)) ? Model.ContentField.Height : "Auto";
+    
+
 }
 
-@if (!String.IsNullOrWhiteSpace(Model.ContentField.FileName))
+@if (!String.IsNullOrWhiteSpace(Model.ContentField.FileName) || !String.IsNullOrWhiteSpace(Model.Settings.DefaultImage))
 {
     <p class="image-field">
         <span class="name">@name.CamelFriendly() :</span>
-        <img src="@Url.Content(Model.ContentField.FileName)" alt="@Model.ContentField.AlternateText" width="@Model.ContentField.Width" height="@Model.ContentField.Height" />
+        <img src="@url" alt="@Model.ContentField.AlternateText" width="@width" height="@height" />
     </p>
 }

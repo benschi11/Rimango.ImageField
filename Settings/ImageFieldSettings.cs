@@ -15,7 +15,10 @@ namespace Rimango.ImageField.Settings
         public int MaxHeight { get; set; }
         public ResizeActions ResizeAction { get; set; }
         public bool Required { get; set; }
+
         public bool AlternateText { get; set; }
+
+        public string DefaultImage { get; set; }
         public string Hint { get; set; }
         public string MediaFolder { get; set; }
         public string FileName { get; set; }

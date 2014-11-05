@@ -11,6 +11,7 @@ Version 0.4.5 RC
 * Fixed [Issue #3](/../../issues/3) - X and Y required on non required Field
 * Fixed [Issue #5](/../../issues/5) - Change size of dispaying the image in admin view
 * Fixed [Issue #6](/../../issues/6) - Fixed size is not really fixed size
+* Implements [Issue #4](/../../issues/4) - Default Image
 
 Not released yet.
 

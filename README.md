@@ -13,7 +13,7 @@ Version 0.4.5 RC
 * Fixed [Issue #6](/../../issues/6) - Fixed size is not really fixed size
 * Implements [Issue #4](/../../issues/4) - Default Image
 
-Not released yet.
+[Source](https://github.com/benschi11/Rimango.ImageField/tree/v0.4.5) | [Zip](https://github.com/benschi11/Rimango.ImageField/archive/v0.4.5.zip)
 
 Version 0.4 (Beta)
 ------------------

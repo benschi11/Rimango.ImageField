@@ -6,8 +6,8 @@
     
 
     string url = (!String.IsNullOrWhiteSpace(Model.ContentField.FileName)) ? Url.Content(Model.ContentField.FileName) : Model.Settings.DefaultImage;
-    string width = (!String.IsNullOrWhiteSpace(Model.ContentField.FileName)) ? Model.ContentField.Width : "Auto";
-    string height = (!String.IsNullOrWhiteSpace(Model.ContentField.FileName)) ? Model.ContentField.Height : "Auto";
+    string width = (!String.IsNullOrWhiteSpace(Model.ContentField.FileName)) ? Model.ContentField.Width.ToString() : "Auto";
+    string height = (!String.IsNullOrWhiteSpace(Model.ContentField.FileName)) ? Model.ContentField.Height.ToString() : "Auto";
     
 
 }

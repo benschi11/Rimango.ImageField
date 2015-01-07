@@ -18,6 +18,7 @@
     
     string name = Model.Field.Name;
     string url = (!String.IsNullOrWhiteSpace(Model.Field.FileName)) ? Url.Content(Model.Field.FileName) : (Model.Settings.DefaultImage ?? string.Empty);
+    string defaultUrl = (Model.Settings.DefaultImage ?? string.Empty);
     string width = (Model.Field.Width > 0 && Model.Field.Width < 200) ? Model.Field.Width.ToString() : (Model.Field.Width <= 0 ? "Auto" :"200");
     
 }
@@ -26,11 +27,14 @@
     <label for="@Html.FieldIdFor(m => "ImageField-" + name)">@name.CamelFriendly()</label>
     @if (!String.IsNullOrEmpty(Model.Field.FileName) || !String.IsNullOrWhiteSpace(Model.Settings.DefaultImage))
     {
-        <img class="remove-@Html.FieldIdFor(m => m)" src="@url" width="@width" /> <br />
-        if (!Model.Settings.Required)
-        {
-            <span id="remove-@Html.FieldIdFor(m => m)" class="button">@T("Remove")</span> <br />
-        }
+        <div>
+            <img class="remove-@Html.FieldIdFor(m => m)" src="@url" width="@width" />
+            @if (!Model.Settings.Required)
+            {
+                <span id="remove-@Html.FieldIdFor(m => m)" class="button btn btn-danger">@T("Remove Image")</span> <br />
+            }
+        </div>
+
     }
     @Html.HiddenFor(m => m.Removed)
 </fieldset>
@@ -84,16 +88,20 @@
 
 @using (Script.Foot()) {
     <script type="text/javascript">
-        //<![CDATA[
-        $('form')
-            .attr('enctype', 'multipart/form-data')
-            .attr('encoding', 'multipart/form-data'); // ie issue
+    //<![CDATA[
+    $('form')
+        .attr('enctype', 'multipart/form-data')
+        .attr('encoding', 'multipart/form-data'); // ie issue
 
-        $('#remove-@Html.FieldIdFor(m => m)').click(function() {
+    $('#remove-@Html.FieldIdFor(m => m)').click(function() {
+        if ("@defaultUrl")
+            $('.remove-@Html.FieldIdFor(m => m)').attr("src", '@Html.Raw(defaultUrl)').attr("width", "auto").attr("height","auto");
+        else
             $('.remove-@Html.FieldIdFor(m => m)').remove();
-            $('#@Html.FieldIdFor(m => m.Removed)').val('true');
-        });
 
-        //]]>
+        $('#@Html.FieldIdFor(m => m.Removed)').val('true');
+    });
+
+    //]]>
     </script>
 }

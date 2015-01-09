@@ -106,8 +106,23 @@
 
                     reader.onloadend = function () {
                         img.src = reader.result;
+                        var origDimensions = { Width: img.width, Height: img.height };
+                        var dialogPreviewDimension = $.RimangoImageField.calculatePreviewDimension({ Width: img.width, Height: img.height }, { Width: 800, Height: 800 });
 
-                        var $dialog = $('<div><div class="jc-dialog"><img src="' + reader.result + '" /></div></div>');
+                        img.height = dialogPreviewDimension.Height;
+                        img.width = dialogPreviewDimension.Width;
+
+                        //var ctx = canvas.getContext("2d");
+                        //ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        //canvas.width = dialogPreviewDimension.Width;
+                        //canvas.height = dialogPreviewDimension.Height;
+                        //ctx.drawImage(img, 0, 0, dialogPreviewDimension.Width, dialogPreviewDimension.Height);
+                        //img.src = src;
+
+                        previewImgDiv.remove("img");
+                        previewImgDiv.append(img);
+
+                        var $dialog = $('<div><div class="jc-dialog"><img width="' + dialogPreviewDimension.Width + '" height="' + dialogPreviewDimension.Height + '" src="' + reader.result + '" /></div></div>');
 
 
                         $dialog.find('img').Jcrop({
@@ -146,6 +161,7 @@
 
                         function updateCoords(coords) {
                             var previewDivDim = $.RimangoImageField.calculatePreviewDimension({ Width: coords.w, Height: coords.h }, { Width: 200, Height: 200 });
+
                             var previewDiv = $("#" + $.RimangoImageField.getPreLoadImageDivId(name));
                             console.log(previewDivDim.Width + ":" + previewDivDim.Height);
                             previewDiv.css("width", previewDivDim.Width);
@@ -157,8 +173,9 @@
 
                             var previewImg = $('#' + $.RimangoImageField.getPreLoadImageId(name));
 
-                            var previewHeight = previewImg[0].naturalHeight;
-                            var previewWidth = previewImg[0].naturalWidth;
+                            
+                            var previewHeight = dialogPreviewDimension.Height;
+                            var previewWidth = dialogPreviewDimension.Width;
 
                             previewImg.css({
                                 width: Math.round(rx * previewWidth) + 'px',
@@ -169,17 +186,21 @@
 
                             console.log("(" + coords.w + "/" + coords.h + ")");
 
-                            $("#" + $.RimangoImageField.getHiddenFieldId(name, "Coordinates_x")).val(coords.x);
-                            $("#" + $.RimangoImageField.getHiddenFieldId(name, "Coordinates_y")).val(coords.y);
-                            $("#" + $.RimangoImageField.getHiddenFieldId(name, "CropedWidth")).val(Math.round(coords.w));
-                            $("#" + $.RimangoImageField.getHiddenFieldId(name, "CropedHeight")).val(Math.round(coords.h));
+
+                            var widthFactor = (origDimensions.Width / dialogPreviewDimension.Width);
+                            var heightFactor = (origDimensions.Width / dialogPreviewDimension.Width);
+
+                            $("#" + $.RimangoImageField.getHiddenFieldId(name, "Coordinates_x")).val(Math.round(coords.x * widthFactor));
+                            $("#" + $.RimangoImageField.getHiddenFieldId(name, "Coordinates_y")).val(Math.round(coords.y * heightFactor));
+                            $("#" + $.RimangoImageField.getHiddenFieldId(name, "CropedWidth")).val(Math.round(coords.w * widthFactor));
+                            $("#" + $.RimangoImageField.getHiddenFieldId(name, "CropedHeight")).val(Math.round(coords.h * heightFactor));
 
                         }
                     };
                     reader.readAsDataURL(file);
 
-                    previewImgDiv.remove("img");
-                    previewImgDiv.append(img);
+                    //previewImgDiv.remove("img");
+                    //previewImgDiv.append(img);
 
                 } else {
                     $('#' + $.RimangoImageField.getPreLoadImageId(name)).remove();

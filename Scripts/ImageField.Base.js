@@ -1,25 +1,36 @@
-﻿jQuery(function($) {
+﻿jQuery(function ($) {
 
-    $.RimangoImageField = (function() {
+    $.RimangoImageField = (function () {
         var fieldSettings = {};
         return {
-            addField: function(name, settings) {
+            addField: function (name, settings) {
                 fieldSettings[name] = settings;
             },
-            getSettings: function(name) {
+            getSettings: function (name) {
                 return fieldSettings[name];
             },
-            getFileElementId: function(name) {
+            getFileElementId: function (name) {
                 return "ImageField-" + name;
             },
-            getPreLoadImageDivId: function(name) {
+            getPreLoadImageDivId: function (name) {
                 return "PreLoadImageDiv-" + name;
             },
-            getPreLoadImageId: function(name) {
+            getPreLoadImageId: function (name) {
                 return "PreLoadImage-" + name;
             },
-            getHiddenFieldId: function(name, coordname) {
+            getHiddenFieldId: function (name, coordname) {
                 return this.getSettings(name).contentTypeName + "_" + coordname;
+            },
+            resetPreviewImage: function (name) {
+                var previewImgDivId = $.RimangoImageField.getPreLoadImageDivId(name);
+                var previewImgDiv = $('#' + previewImgDivId);
+                previewImgDiv.empty();
+            },
+            resetFileElement: function(name) {
+                var fileId = $.RimangoImageField.getFileElementId(name);
+                var fileElement = $("#" + fileId);
+                fileElement.wrap('<form>').closest('form').get(0).reset();
+                fileElement.unwrap();
             },
             calculatePreviewDimension: function (actualDimensions, maxDimensions) {
                 //console.log("old (w/h) (" + actualDimensions.Width + "/" + actualDimensions.Height + ")");
@@ -34,21 +45,18 @@
                 var heightFactor = actualDimensions.Height / newHeight;
                 //console.log("HeightFactor:" + heightFactor);
 
-                if (widthFactor !== heightFactor)
-                {
-                    if (widthFactor > heightFactor)
-                    {
+                if (widthFactor !== heightFactor) {
+                    if (widthFactor > heightFactor) {
                         newHeight = Math.round(actualDimensions.Height / widthFactor);
                     }
-                    else
-                    {
+                    else {
                         newWidth = Math.round(actualDimensions.Width / heightFactor);
                     }
                 }
 
                 return { Width: newWidth, Height: newHeight };
             },
-            crop: function(name) {
+            crop: function (name) {
                 $("#" + this.getFileElementId(name)).change(function (e) {
                     var settings = $.RimangoImageField.getSettings(name);
                     var file = e.originalEvent.srcElement.files[0];
@@ -66,10 +74,10 @@
                         var img = document.createElement("img");
                         img.id = imageId;
                         var previewImgDiv = $('#' + previewImgDivId);
-                        previewImgDiv.empty();
+                        $.RimangoImageField.resetPreviewImage(name);
 
 
-                        reader.onloadend = function() {
+                        reader.onloadend = function () {
                             img.src = reader.result;
 
                             var $dialog = $('<div><div class="jc-dialog"><img src="' + reader.result + '" /></div></div>');
@@ -83,25 +91,29 @@
                                 allowResize: (settings.userCropOption === "Fixed" ? 0 : 1),
                                 allowSelect: 0,
                                 aspectRatio: ((settings.userCropOption === "OnlyKeepRatio" || settings.userCropOption === "Fixed") ? settings.width / settings.height : 0)
-                            }, function() {
+                            }, function () {
                                 jcrop_api = this;
                                 $dialog.dialog({
                                     modal: true,
                                     title: 'Crop your Image',
-                                    close: function() { $dialog.remove(); },
+                                    close: function(event) {
+                                        if (event.originalEvent) {
+                                            $.RimangoImageField.resetPreviewImage(name);
+                                            $.RimangoImageField.resetFileElement(name);
+                                        }
+                                        $dialog.remove();
+                                    },
                                     width: jcrop_api.getBounds()[0] + 34,
                                     resizable: false,
                                     buttons: {
-                                        "Save": function() {
+                                        "Save": function () {
                                             $(this).dialog('close');
-                                        },
-                                        //"Close": function() {
-                                        //    resetPreviewImage(name);
-                                        //    $(this).dialog('close');
-                                        //}
+                                        }
                                     }
                                 });
                             });
+                                
+
 
                             function updateCoords(coords) {
 

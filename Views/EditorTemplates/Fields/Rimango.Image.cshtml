@@ -17,6 +17,7 @@
     }
     
     string name = Model.Field.Name;
+    string defaultUrl = Model.Settings.DefaultImage ?? string.Empty;
     string url = string.Empty;
     if (!string.IsNullOrEmpty(Model.Field.FileName) || !string.IsNullOrEmpty(Model.Settings.DefaultImage))
     {

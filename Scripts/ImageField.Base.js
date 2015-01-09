@@ -49,7 +49,7 @@
                 return { Width: newWidth, Height: newHeight };
             },
             crop: function(name) {
-                $("#" + this.getFileElementId(name)).change(function(e) {
+                $("#" + this.getFileElementId(name)).change(function (e) {
                     var settings = $.RimangoImageField.getSettings(name);
                     var file = e.originalEvent.srcElement.files[0];
 
@@ -66,6 +66,7 @@
                         var img = document.createElement("img");
                         img.id = imageId;
                         var previewImgDiv = $('#' + previewImgDivId);
+                        previewImgDiv.empty();
 
 
                         reader.onloadend = function() {

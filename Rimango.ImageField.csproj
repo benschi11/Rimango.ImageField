@@ -121,7 +121,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Styles\Rimanog.ImageField.Admin.css" />
+    <Content Include="Styles\Rimango.ImageField.Admin.css" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

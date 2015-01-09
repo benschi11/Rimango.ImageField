@@ -24,6 +24,9 @@
             getHiddenFieldId: function (name, coordname) {
                 return this.getSettings(name).contentTypeName + "_" + coordname;
             },
+            getSpinnerId: function(name) {
+                return "Spinner-" + name;
+            },
             resetPreviewImage: function (name) {
                 var previewImgDivId = $.RimangoImageField.getPreLoadImageDivId(name);
                 var previewImgDiv = $('#' + previewImgDivId);
@@ -36,6 +39,15 @@
                     var link = $("<a href='#' class='reCrop' id='"+$.RimangoImageField.getCropLinkId(name)+"'>New Crop</a>");
                     previewImgDiv.after(link);
                     $.RimangoImageField.addCropEventHandler(name, link);
+                }
+            },
+            toggleSpinner: function(name) {
+                var spinnerId = $.RimangoImageField.getSpinnerId(name);
+                var spinner = $("#" + spinnerId);
+                if (spinner.hasClass("spinner")) {
+                    spinner.removeClass("spinner");
+                } else {
+                    spinner.addClass("spinner");
                 }
             },
             resetFileElement: function (name) {
@@ -83,7 +95,7 @@
                 }
             },
             crop: function (name) {
-              
+                $.RimangoImageField.toggleSpinner(name);
                 var settings = $.RimangoImageField.getSettings(name);
                 var fileId = $.RimangoImageField.getFileElementId(name);
                 var file = $("#" + fileId)[0].files[0];
@@ -112,13 +124,6 @@
                         img.height = dialogPreviewDimension.Height;
                         img.width = dialogPreviewDimension.Width;
 
-                        //var ctx = canvas.getContext("2d");
-                        //ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        //canvas.width = dialogPreviewDimension.Width;
-                        //canvas.height = dialogPreviewDimension.Height;
-                        //ctx.drawImage(img, 0, 0, dialogPreviewDimension.Width, dialogPreviewDimension.Height);
-                        //img.src = src;
-
                         previewImgDiv.remove("img");
                         previewImgDiv.append(img);
 
@@ -145,6 +150,9 @@
                                         $.RimangoImageField.resetFileElement(name);
                                     }
                                     $dialog.remove();
+                                },
+                                open: function() {
+                                    $.RimangoImageField.toggleSpinner(name);
                                 },
                                 width: jcrop_api.getBounds()[0] + 34,
                                 resizable: false,

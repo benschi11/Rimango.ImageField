@@ -7,6 +7,7 @@
     //Style.Include("contrib-imagefield-admin.css");
 
     Style.Require("jQueryUI_Orchard");
+    Style.Require("Rimango.ImageField.Admin");
 
 
     if (Model.Settings.ResizeAction == ResizeActions.UserCrop)
@@ -44,6 +45,7 @@
 </fieldset>
 <fieldset>
     <input id="ImageField-@name" name="ImageField-@name" type="file" value="@T("Browse")" size="64" />
+    <div id="Spinner-@name"></div>
     <span class="hint">@Model.Settings.Hint</span>
 </fieldset>
 

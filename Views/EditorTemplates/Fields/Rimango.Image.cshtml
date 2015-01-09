@@ -22,6 +22,7 @@
     {
         url = (!String.IsNullOrWhiteSpace(Model.Field.FileName)) ? Url.Content(Model.Field.FileName) : (VirtualPathUtility.IsAbsolute(Model.Settings.DefaultImage) ? VirtualPathUtility.ToAppRelative(Model.Settings.DefaultImage) : Url.Content(Model.Settings.DefaultImage));
     }
+
     string width = (Model.Field.Width > 0 && Model.Field.Width < 200) ? Model.Field.Width.ToString() : (Model.Field.Width <= 0 ? "Auto" :"200");
     
 }

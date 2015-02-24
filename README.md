@@ -6,6 +6,19 @@ I will add a new feature to allow the user to define the crop area by it's own.
 
 Demo Site (only with CustomForms for the Moment): http://orchard-demos.neuhold.pro/RimangoImageField
 
+Version 1.9 (for Orchard 1.9)
+------------------
+
+* Retarget to .net framework 4.5.1
+
+Version 1.8 (for Orchard 1.8.1)
+------------------
+
+* Implements [Issue #7](/../../issues/7) - Add a ReCrop Link
+* Implements [Issue #10](/../../issues/10) - Resize Image in Crop Window if its too large
+* Fixed [Issue #9](/../../issues/9) - Preview not reloaded after selecting new picture
+* Small BugFix
+
 Version 0.4.5.1 RC 
 ------------------
 (Bugfix for 0.4.5 - use this Version instead)

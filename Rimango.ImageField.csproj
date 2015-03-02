@@ -92,6 +92,10 @@
       <Project>{73a7688a-5bd3-4f7e-adfa-ce36c5a10e3b}</Project>
       <Name>Orchard.MediaLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Orchard.Tokens\Orchard.Tokens.csproj">
+      <Project>{6F759635-13D7-4E94-BCC9-80445D63F117}</Project>
+      <Name>Orchard.Tokens</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Driver\ImageFieldDriver.cs" />
@@ -102,6 +106,7 @@
     <Compile Include="Services\ImageService.cs" />
     <Compile Include="Settings\ImageFieldEditorEvents.cs" />
     <Compile Include="Settings\ImageFieldSettings.cs" />
+    <Compile Include="Tokens\ImageFieldTokens.cs" />
     <Compile Include="ViewModels\ImageFieldViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

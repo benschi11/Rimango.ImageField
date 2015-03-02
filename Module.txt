@@ -2,8 +2,8 @@
 AntiForgery: enabled
 Author: Rimango Development
 Website: http://neuhold.pro
-Version: 0.4.5.1
-OrchardVersion: 1.8.1
+Version: 1.8.1.0
+OrchardVersion: 1.8
 Description: ImageField with the possibility to validate, resize, crop and UserCrop the uploaded image. 
 Features:
     Rimango.ImageField:

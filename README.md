@@ -10,6 +10,9 @@ Version 1.9 (for Orchard 1.9)
 ------------------
 
 * Retarget to .net framework 4.5.1
+ 
+[Source](https://github.com/benschi11/Rimango.ImageField/tree/v1.9) | [Zip](https://github.com/benschi11/Rimango.ImageField/archive/v1.9.zip)
+
 
 Version 1.8 (for Orchard 1.8.1)
 ------------------
@@ -18,6 +21,10 @@ Version 1.8 (for Orchard 1.8.1)
 * Implements [Issue #10](/../../issues/10) - Resize Image in Crop Window if its too large
 * Fixed [Issue #9](/../../issues/9) - Preview not reloaded after selecting new picture
 * Small BugFix
+
+
+[Source](https://github.com/benschi11/Rimango.ImageField/tree/v1.8) | [Zip](https://github.com/benschi11/Rimango.ImageField/archive/v1.8.zip)
+
 
 Version 0.4.5.1 RC 
 ------------------

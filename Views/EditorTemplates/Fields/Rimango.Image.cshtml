@@ -8,12 +8,11 @@
 
     Style.Require("jQueryUI_Orchard");
     Style.Require("Rimango.ImageField.Admin");
+    Style.Require("Rimango.ImageField.jCrop");
 
 
     if (Model.Settings.ResizeAction == ResizeActions.UserCrop)
     {
-        Script.Include("~/Modules/Orchard.ImageEditor/Scripts/jcrop/js/jquery.Jcrop.min.js");
-        Style.Include("~/Modules/Orchard.ImageEditor/Styles/jcrop/css/jquery.Jcrop.css");
         Script.Require("Rimango.ImageField.Base").AtFoot();
     }
     
@@ -60,9 +59,10 @@
     //    dim = Model.Settings.GetPreviewImageDimension();
     //}
     <span class="hint">@T("Preview:")</span>
-    <div id="PreLoadImageDiv-@name" style="width: 50px; height:50px; overflow: hidden; margin-left: 5px;">
+    <div id="PreLoadImageDiv-@name" style="width: 50px; height: 50px; overflow: hidden; margin-left: 5px;">
 
     </div>
+
     using (Script.Foot())
     {
         <script type="text/javascript">
@@ -75,7 +75,7 @@
                     contentTypeName: '@Html.FieldIdFor(m => m)',
                     previewWidth: @dim.Width,
                     previewHeight: @dim.Height,
-                    };
+                };
                 $.RimangoImageField.addField('@name', settings);
                 $.RimangoImageField.addCropEventHandler('@name');
             });
@@ -94,20 +94,20 @@
 
 @using (Script.Foot()) {
     <script type="text/javascript">
-    //<![CDATA[
-    $('form')
-        .attr('enctype', 'multipart/form-data')
-        .attr('encoding', 'multipart/form-data'); // ie issue
+        //<![CDATA[
+        $('form')
+            .attr('enctype', 'multipart/form-data')
+            .attr('encoding', 'multipart/form-data'); // ie issue
 
-    $('#remove-@Html.FieldIdFor(m => m)').click(function() {
-        if ("@defaultUrl")
-            $('.remove-@Html.FieldIdFor(m => m)').attr("src", '@Html.Raw(defaultUrl)').attr("width", "auto").attr("height","auto");
-        else
-            $('.remove-@Html.FieldIdFor(m => m)').remove();
+        $('#remove-@Html.FieldIdFor(m => m)').click(function() {
+            if ("@defaultUrl")
+                $('.remove-@Html.FieldIdFor(m => m)').attr("src", '@Html.Raw(defaultUrl)').attr("width", "auto").attr("height","auto");
+            else
+                $('.remove-@Html.FieldIdFor(m => m)').remove();
 
-        $('#@Html.FieldIdFor(m => m.Removed)').val('true');
-    });
+            $('#@Html.FieldIdFor(m => m.Removed)').val('true');
+        });
 
-    //]]>
+        //]]>
     </script>
 }

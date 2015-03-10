@@ -72,6 +72,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\ImageField.Base.js" />
+    <Content Include="Scripts\jCrop\jquery.color.js" />
+    <Content Include="Scripts\jCrop\jquery.Jcrop.js" />
+    <Content Include="Scripts\jCrop\jquery.Jcrop.min.js" />
+    <Content Include="Scripts\jCrop\jquery.min.js" />
+    <Content Include="Styles\jCrop\Jcrop.gif" />
+    <Content Include="Styles\jCrop\jquery.Jcrop.css" />
+    <Content Include="Styles\jCrop\jquery.Jcrop.min.css" />
     <Content Include="Styles\Rimango.ImageField.css" />
     <Content Include="Web.config" />
     <Content Include="Scripts\Web.config" />

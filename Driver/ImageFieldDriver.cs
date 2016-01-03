@@ -5,7 +5,6 @@
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-﻿using JetBrains.Annotations;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
@@ -24,7 +23,6 @@ namespace Rimango.ImageField.Driver
 {
     using Rimango.ImageField.Services;
 
-    [UsedImplicitly]
     public class ImageFieldDriver : ContentFieldDriver<Fields.ImageField>
     {
         private const string TemplateName = "Fields/Rimango.Image";
@@ -160,6 +158,7 @@ namespace Rimango.ImageField.Driver
                             break;
                         case ResizeActions.Crop:
                             target = _imageService.Crop(image, new Point(0, 0), maxDimensions);
+                            newDimensions = maxDimensions;
                             Services.Notifier.Information(T("The image {0} has been cropped to {1}x{2}",
                                 field.Name.CamelFriendly(), maxDimensions.Width, maxDimensions.Height));
                             break;
@@ -170,6 +169,7 @@ namespace Rimango.ImageField.Driver
                                 new Point(viewModel.Coordinates.x, viewModel.Coordinates.y),
                                 viewModel.CropedWidth,
                                 viewModel.CropedHeight);
+                            newDimensions = new Dimensions(viewModel.CropedWidth, viewModel.CropedHeight);
                             Services.Notifier.Information(T("The image {0} has been cropped to {1}x{2}",
                                 field.Name.CamelFriendly(), viewModel.CropedWidth, viewModel.CropedHeight));
                             break;

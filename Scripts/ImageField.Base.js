@@ -89,16 +89,23 @@
                     });
                     // Use the Click Event of the object
                 } else {
-                    $(object).click(function(e) {
+                    $(object).click(function (e) {
                         return $.RimangoImageField.crop(name);
                     });
                 }
             },
             crop: function (name) {
-                $.RimangoImageField.toggleSpinner(name);
+
                 var settings = $.RimangoImageField.getSettings(name);
                 var fileId = $.RimangoImageField.getFileElementId(name);
                 var file = $("#" + fileId)[0].files[0];
+
+                if (file === undefined) {
+                    alert("No File is selected!");
+                    return;
+                }
+
+                $.RimangoImageField.toggleSpinner(name);
 
                 var imageType = /image.*/;
 
@@ -118,6 +125,9 @@
 
                     reader.onloadend = function () {
                         img.src = reader.result;
+                    };
+
+                    img.onload = function () {
                         var origDimensions = { Width: img.width, Height: img.height };
                         var dialogPreviewDimension = $.RimangoImageField.calculatePreviewDimension({ Width: img.width, Height: img.height }, { Width: 800, Height: 800 });
 
@@ -151,7 +161,7 @@
                                     }
                                     $dialog.remove();
                                 },
-                                open: function() {
+                                open: function () {
                                     $.RimangoImageField.toggleSpinner(name);
                                 },
                                 width: jcrop_api.getBounds()[0] + 34,
@@ -181,7 +191,7 @@
 
                             var previewImg = $('#' + $.RimangoImageField.getPreLoadImageId(name));
 
-                            
+
                             var previewHeight = dialogPreviewDimension.Height;
                             var previewWidth = dialogPreviewDimension.Width;
 
@@ -204,7 +214,7 @@
                             $("#" + $.RimangoImageField.getHiddenFieldId(name, "CropedHeight")).val(Math.round(coords.h * heightFactor));
 
                         }
-                    };
+                    }
                     reader.readAsDataURL(file);
 
                     //previewImgDiv.remove("img");

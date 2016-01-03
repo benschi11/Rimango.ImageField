@@ -5,7 +5,6 @@
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-﻿using JetBrains.Annotations;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
@@ -24,7 +23,6 @@ namespace Rimango.ImageField.Driver
 {
     using Rimango.ImageField.Services;
 
-    [UsedImplicitly]
     public class ImageFieldDriver : ContentFieldDriver<Fields.ImageField>
     {
         private const string TemplateName = "Fields/Rimango.Image";

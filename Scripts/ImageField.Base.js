@@ -118,6 +118,9 @@
 
                     reader.onloadend = function () {
                         img.src = reader.result;
+                    };
+
+                    img.onload = function () {
                         var origDimensions = { Width: img.width, Height: img.height };
                         var dialogPreviewDimension = $.RimangoImageField.calculatePreviewDimension({ Width: img.width, Height: img.height }, { Width: 800, Height: 800 });
 
@@ -151,7 +154,7 @@
                                     }
                                     $dialog.remove();
                                 },
-                                open: function() {
+                                open: function () {
                                     $.RimangoImageField.toggleSpinner(name);
                                 },
                                 width: jcrop_api.getBounds()[0] + 34,
@@ -181,7 +184,7 @@
 
                             var previewImg = $('#' + $.RimangoImageField.getPreLoadImageId(name));
 
-                            
+
                             var previewHeight = dialogPreviewDimension.Height;
                             var previewWidth = dialogPreviewDimension.Width;
 
@@ -204,7 +207,7 @@
                             $("#" + $.RimangoImageField.getHiddenFieldId(name, "CropedHeight")).val(Math.round(coords.h * heightFactor));
 
                         }
-                    };
+                    }
                     reader.readAsDataURL(file);
 
                     //previewImgDiv.remove("img");

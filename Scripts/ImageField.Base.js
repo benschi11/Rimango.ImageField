@@ -89,16 +89,23 @@
                     });
                     // Use the Click Event of the object
                 } else {
-                    $(object).click(function(e) {
+                    $(object).click(function (e) {
                         return $.RimangoImageField.crop(name);
                     });
                 }
             },
             crop: function (name) {
-                $.RimangoImageField.toggleSpinner(name);
+
                 var settings = $.RimangoImageField.getSettings(name);
                 var fileId = $.RimangoImageField.getFileElementId(name);
                 var file = $("#" + fileId)[0].files[0];
+
+                if (file === undefined) {
+                    alert("No File is selected!");
+                    return;
+                }
+
+                $.RimangoImageField.toggleSpinner(name);
 
                 var imageType = /image.*/;
 

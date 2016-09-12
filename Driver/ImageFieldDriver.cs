@@ -163,15 +163,14 @@ namespace Rimango.ImageField.Driver
                                 field.Name.CamelFriendly(), maxDimensions.Width, maxDimensions.Height));
                             break;
                         case ResizeActions.UserCrop:
-                            //target = CropImage(field, viewModel.CropedWidth, viewModel.CropedHeight, image, new Point(viewModel.Coordinates.x, viewModel.Coordinates.y));
                             target = _imageService.Crop(
                                 image,
                                 new Point(viewModel.Coordinates.x, viewModel.Coordinates.y),
-                                viewModel.CropedWidth,
-                                viewModel.CropedHeight);
-                            newDimensions = new Dimensions(viewModel.CropedWidth, viewModel.CropedHeight);
+                                Math.Min(viewModel.CropedWidth, image.Width),
+                                Math.Min(viewModel.CropedHeight, image.Height));
+                            newDimensions = new Dimensions(target.Width, target.Height);
                             Services.Notifier.Information(T("The image {0} has been cropped to {1}x{2}",
-                                field.Name.CamelFriendly(), viewModel.CropedWidth, viewModel.CropedHeight));
+                                field.Name.CamelFriendly(), newDimensions.Width, newDimensions.Height));
                             break;
                     }
 

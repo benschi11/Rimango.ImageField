@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 ﻿using System.Drawing.Drawing2D;
 ﻿using System.Drawing.Imaging;
 ﻿using System.IO;
@@ -163,15 +163,29 @@ namespace Rimango.ImageField.Driver
                                 field.Name.CamelFriendly(), maxDimensions.Width, maxDimensions.Height));
                             break;
                         case ResizeActions.UserCrop:
-                            //target = CropImage(field, viewModel.CropedWidth, viewModel.CropedHeight, image, new Point(viewModel.Coordinates.x, viewModel.Coordinates.y));
+                            // clamp dimensions to prevent overflow caused when some aspect ratios
+                            // result in the integer rounding up and ending up bigger than the original canvas
+                            viewModel.CropedWidth =
+                                viewModel.Coordinates.x + viewModel.CropedWidth > image.Width
+                                    ? image.Width - viewModel.Coordinates.x
+                                    : viewModel.CropedWidth;
+
+                            viewModel.CropedHeight =
+                                viewModel.Coordinates.y + viewModel.CropedHeight > image.Height
+                                    ? image.Height - viewModel.Coordinates.y
+                                    : viewModel.CropedHeight;
+
                             target = _imageService.Crop(
                                 image,
                                 new Point(viewModel.Coordinates.x, viewModel.Coordinates.y),
                                 viewModel.CropedWidth,
                                 viewModel.CropedHeight);
-                            newDimensions = new Dimensions(viewModel.CropedWidth, viewModel.CropedHeight);
+
+                            newDimensions = new Dimensions(target.Width, target.Height);
+
                             Services.Notifier.Information(T("The image {0} has been cropped to {1}x{2}",
-                                field.Name.CamelFriendly(), viewModel.CropedWidth, viewModel.CropedHeight));
+                                field.Name.CamelFriendly(), newDimensions.Width, newDimensions.Height));
+
                             break;
                     }
 

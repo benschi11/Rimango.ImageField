@@ -208,10 +208,10 @@
                             var widthFactor = (origDimensions.Width / dialogPreviewDimension.Width);
                             var heightFactor = (origDimensions.Width / dialogPreviewDimension.Width);
 
-                            $("#" + $.RimangoImageField.getHiddenFieldId(name, "Coordinates_x")).val(Math.round(coords.x * widthFactor));
-                            $("#" + $.RimangoImageField.getHiddenFieldId(name, "Coordinates_y")).val(Math.round(coords.y * heightFactor));
-                            $("#" + $.RimangoImageField.getHiddenFieldId(name, "CropedWidth")).val(Math.round(coords.w * widthFactor));
-                            $("#" + $.RimangoImageField.getHiddenFieldId(name, "CropedHeight")).val(Math.round(coords.h * heightFactor));
+                            $("#" + $.RimangoImageField.getHiddenFieldId(name, "Coordinates_x")).val(Math.floor(coords.x * widthFactor));
+                            $("#" + $.RimangoImageField.getHiddenFieldId(name, "Coordinates_y")).val(Math.floor(coords.y * heightFactor));
+                            $("#" + $.RimangoImageField.getHiddenFieldId(name, "CropedWidth")).val(Math.floor(coords.w * widthFactor));
+                            $("#" + $.RimangoImageField.getHiddenFieldId(name, "CropedHeight")).val(Math.floor(coords.h * heightFactor));
 
                         }
                     }
